@@ -29,123 +29,75 @@
         }
 
         /* =========================================
-           HERO / ENVELOPE
+           HERO — simplified, reliable reveal
+           (opacity/transform only, no clip-path animation)
            ========================================= */
         #hero-scene {
             position: relative;
-            height: 100vh;
+            min-height: 100vh;
             width: 100vw;
             display: flex;
             justify-content: center;
             align-items: center;
-            perspective: 1200px;
             z-index: 10;
             background:
                 radial-gradient(circle at 20% 20%, rgba(184,134,59,0.06), transparent 45%),
                 radial-gradient(circle at 80% 75%, rgba(122,0,22,0.05), transparent 45%),
                 var(--ivory);
+            transition: opacity 0.6s ease, visibility 0.6s;
         }
-
-        .envelope-wrapper {
-            position: relative;
-            width: 340px;
-            height: 230px;
-            transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
-            filter: drop-shadow(0 18px 28px rgba(54,36,25,0.18));
-        }
-
-        .envelope-back {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, #8f6423 0%, #b8863b 100%);
-            border-radius: 2px;
-        }
-
-        .envelope-front {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, #c9a24d 0%, #e3c07a 55%, #b8863b 100%);
-            clip-path: polygon(0 0, 50% 50%, 100% 0, 100% 100%, 0 100%);
-            border-radius: 2px;
-            z-index: 3;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.08);
-        }
-
-        .envelope-flap {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, #d8b567 0%, #b8863b 100%);
-            clip-path: polygon(0 0, 100% 0, 50% 55%);
-            transform-origin: top;
-            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), z-index 0s 0.4s;
-            z-index: 4;
-            border-radius: 2px;
-        }
-
-        .wax-seal {
-            position: absolute;
-            left: 50%; top: 52%;
-            transform: translate(-50%, -50%);
-            width: 62px; height: 62px;
-            background: radial-gradient(circle, #7a0016 0%, #4a000d 100%);
-            border-radius: 50%;
-            z-index: 5;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3), inset 0 0 5px rgba(255,255,255,0.15);
-            display: flex; justify-content: center; align-items: center;
-            color: var(--gold-tint); font-family: 'Cinzel', serif; font-size: 1.05rem; font-weight: 600; letter-spacing: 1px;
-            transition: transform 0.3s, opacity 0.3s;
-        }
-        .wax-seal:hover { transform: translate(-50%, -50%) scale(1.08); }
-
-        .invite-card-preview {
-            position: absolute;
-            top: 8px; left: 12px; right: 12px; bottom: 8px;
-            background: var(--card);
-            border-radius: 2px;
-            z-index: 2;
-            border: 1px solid var(--gold);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+        #hero-scene.dismissed {
             opacity: 0;
-            transition: opacity 0.3s ease;
+            visibility: hidden;
+            pointer-events: none;
+            position: absolute;
+            top: 0; left: 0;
         }
 
-        .preview-ganesha { color: var(--maroon); font-size: 0.8rem; margin-bottom: 8px; }
+        .envelope-card {
+            width: 280px;
+            padding: 40px 24px;
+            background: var(--card);
+            border: 1px solid var(--gold);
+            text-align: center;
+            box-shadow: 0 18px 40px rgba(54,36,25,0.14);
+            transition: transform 0.5s ease, opacity 0.5s ease;
+        }
+        .envelope-card.breaking {
+            transform: scale(0.94);
+            opacity: 0;
+        }
+
+        .preview-ganesha { color: var(--maroon); font-size: 0.8rem; margin-bottom: 14px; }
         .preview-names {
             font-family: 'Cormorant Garamond', serif;
             font-variant: small-caps;
             letter-spacing: 2px;
-            font-size: 1.5rem;
+            font-size: 1.7rem;
             color: var(--ink);
-            line-height: 1.3;
-            text-align: center;
+            line-height: 1.35;
         }
 
-        .envelope-wrapper.open .envelope-flap { transform: rotateX(180deg); z-index: 1; }
-        .envelope-wrapper.open .wax-seal { opacity: 0; pointer-events: none; }
-        .envelope-wrapper.open .invite-card-preview {
-            opacity: 1;
-            transform: translateY(-120px);
-            transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1) 0.5s, opacity 0.3s 0.3s;
+        .wax-seal {
+            width: 58px; height: 58px;
+            margin: 26px auto 0;
+            background: radial-gradient(circle, #7a0016 0%, #4a000d 100%);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3), inset 0 0 5px rgba(255,255,255,0.15);
+            display: flex; justify-content: center; align-items: center;
+            color: var(--gold-tint); font-family: 'Cinzel', serif; font-size: 1rem; font-weight: 600; letter-spacing: 1px;
+            transition: transform 0.25s ease;
         }
+        .wax-seal:active { transform: scale(0.9); }
 
-        .scroll-prompt {
-            position: absolute;
-            bottom: 48px;
-            text-align: center;
-            width: 100%;
+        .tap-hint {
             font-family: 'Cinzel', serif;
-            font-size: 0.72rem;
-            letter-spacing: 3px;
+            font-size: 0.62rem;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
             color: var(--gold-deep);
-            opacity: 0;
-            transition: opacity 1s 1.5s;
-            animation: bounce 2.2s infinite;
-        }
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-8px); }
-            60% { transform: translateY(-4px); }
+            margin-top: 12px;
         }
 
         /* =========================================
@@ -153,6 +105,9 @@
            ========================================= */
         #app-container {
             display: none;
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
             width: 100%;
             max-width: 560px;
             margin: 0 auto;
@@ -164,44 +119,40 @@
             padding: 36px 18px 60px;
             box-sizing: border-box;
         }
+        #app-container.visible { opacity: 1; transform: translateY(0); }
 
         .frame-outer {
             position: relative;
-            padding: 34px;
+            padding: 30px;
         }
 
         .app-inner {
             position: relative;
             background: var(--card);
             border: 1px solid var(--gold);
-            padding: 56px 34px 44px;
+            padding: 50px 32px 40px;
             text-align: center;
         }
-        /* inner hairline rule, set slightly inside the border for the classic double-line look */
         .app-inner::after {
             content: "";
             position: absolute;
-            top: 8px; left: 8px; right: 8px; bottom: 8px;
+            top: 7px; left: 7px; right: 7px; bottom: 7px;
             border: 1px solid var(--gold);
             pointer-events: none;
         }
 
         .corner-ornament {
             position: absolute;
-            width: 86px; height: 86px;
+            width: 42px; height: 42px;
             color: var(--gold);
             z-index: 2;
         }
-        .corner-tl { top: -6px; left: -6px; }
-        .corner-tr { top: -6px; right: -6px; transform: scaleX(-1); }
-        .corner-bl { bottom: -6px; left: -6px; transform: scaleY(-1); }
-        .corner-br { bottom: -6px; right: -6px; transform: scale(-1,-1); }
+        .corner-tl { top: -8px; left: -8px; }
+        .corner-tr { top: -8px; right: -8px; transform: scaleX(-1); }
+        .corner-bl { bottom: -8px; left: -8px; transform: scaleY(-1); }
+        .corner-br { bottom: -8px; right: -8px; transform: scale(-1,-1); }
 
-        .medallion {
-            width: 46px; height: 46px;
-            color: var(--gold);
-            margin: 0 auto;
-        }
+        .medallion { width: 44px; height: 44px; color: var(--gold); margin: 0 auto; }
         .medallion.top { margin-bottom: 18px; }
         .medallion.bottom { margin-top: 26px; transform: rotate(180deg); }
 
@@ -235,11 +186,7 @@
             display: block;
         }
 
-        .divider {
-            width: 54px; height: 1px;
-            background: var(--gold);
-            margin: 30px auto;
-        }
+        .divider { width: 54px; height: 1px; background: var(--gold); margin: 30px auto; }
 
         /* =========================================
            RSVP INTERFACE
@@ -289,16 +236,16 @@
             cursor: pointer;
             transition: all 0.3s;
         }
-        .btn-rsvp.selected {
-            background: var(--maroon);
-            border-color: var(--maroon);
-            color: #fff;
-        }
+        .btn-rsvp.selected { background: var(--maroon); border-color: var(--maroon); color: #fff; }
 
-        .passcode-box {
-            background: transparent;
-            padding: 6px 0 0;
-            margin: 8px 0 0;
+        .no-events-note {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1rem;
+            color: var(--ink-soft);
+            padding: 20px 10px;
+            border-top: 1px solid var(--gold-tint);
+            border-bottom: 1px solid var(--gold-tint);
+            margin: 20px 0;
         }
 
         input[type="text"], textarea {
@@ -331,23 +278,22 @@
             transition: background 0.3s;
         }
         .btn-primary:hover { background: #5a0010; }
+        .btn-primary:disabled { background: #c9b6a8; cursor: not-allowed; }
 
         #status-msg, #auth-error { font-family: 'Montserrat', sans-serif; }
     </style>
 </head>
 <body>
 
-<!-- reusable ornament artwork, referenced everywhere below via <use> -->
 <svg width="0" height="0" style="position:absolute">
   <defs>
-    <symbol id="ornament-corner" viewBox="0 0 100 100">
-      <path d="M4,4 C 30,4 22,34 46,28 C 66,23 58,52 82,48" fill="none" stroke="currentColor" stroke-width="1.3"/>
-      <path d="M4,4 C 4,30 34,22 28,46 C 23,66 52,58 48,82" fill="none" stroke="currentColor" stroke-width="1.3"/>
-      <circle cx="46" cy="28" r="3.2" fill="none" stroke="currentColor" stroke-width="1.1"/>
-      <circle cx="28" cy="46" r="3.2" fill="none" stroke="currentColor" stroke-width="1.1"/>
-      <path d="M78,44 C 84,40 90,44 88,50 C 86,56 78,54 78,44 Z" fill="none" stroke="currentColor" stroke-width="1.1"/>
-      <path d="M44,78 C 40,84 44,90 50,88 C 56,86 54,78 44,78 Z" fill="none" stroke="currentColor" stroke-width="1.1"/>
-      <path d="M4,4 L14,4 M4,4 L4,14" stroke="currentColor" stroke-width="1.3"/>
+    <!-- restrained single-curve vine, 2 leaves, 1 bud — replaces the previous tangled version -->
+    <symbol id="ornament-corner" viewBox="0 0 60 60">
+      <path d="M6,6 C 18,10 14,24 28,22" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/>
+      <ellipse cx="14" cy="12" rx="5" ry="2.4" transform="rotate(-25 14 12)" fill="none" stroke="currentColor" stroke-width="1"/>
+      <ellipse cx="21" cy="19" rx="5" ry="2.4" transform="rotate(15 21 19)" fill="none" stroke="currentColor" stroke-width="1"/>
+      <circle cx="29" cy="22" r="2.6" fill="none" stroke="currentColor" stroke-width="1"/>
+      <circle cx="29" cy="22" r="1" fill="currentColor"/>
     </symbol>
     <symbol id="ornament-medallion" viewBox="0 0 60 60">
       <g fill="none" stroke="currentColor" stroke-width="1.1">
@@ -362,22 +308,17 @@
   </defs>
 </svg>
 
-<!-- 3D ENVELOPE HERO SCENE -->
+<!-- HERO / SEAL -->
 <div id="hero-scene">
-    <div class="envelope-wrapper" id="envelope">
-        <div class="envelope-back"></div>
-        <div class="invite-card-preview">
-            <div class="preview-ganesha">॥ श्री गणेशाय नमः ॥</div>
-            <div class="preview-names">Aditya &amp; Neha</div>
-        </div>
-        <div class="envelope-front"></div>
-        <div class="envelope-flap"></div>
+    <div class="envelope-card" id="envelope-card">
+        <div class="preview-ganesha">॥ श्री गणेशाय नमः ॥</div>
+        <div class="preview-names">Aditya &amp; Neha</div>
         <div class="wax-seal" onclick="openEnvelope()">A&amp;N</div>
+        <div class="tap-hint">Tap the seal to open</div>
     </div>
-    <div class="scroll-prompt" id="scroll-prompt">Scroll to view invitation</div>
 </div>
 
-<!-- MAIN JSON-DRIVEN APPLICATION -->
+<!-- MAIN CARD -->
 <div id="app-container">
     <div class="frame-outer">
         <svg class="corner-ornament corner-tl"><use href="#ornament-corner"/></svg>
@@ -396,25 +337,25 @@
 
             <div class="divider"></div>
 
-            <!-- AUTHENTICATION (Passcode) -->
-            <div id="auth-section" class="passcode-box">
+            <div id="auth-section">
                 <div class="pre-title" style="margin-bottom: 14px; color: var(--ink-soft);">Your Invitation</div>
                 <input type="text" id="inviteCode" placeholder="ENTER YOUR PASSCODE" style="text-transform: uppercase;">
                 <button class="btn-primary" onclick="verifyPasscode()">Unlock Details</button>
                 <div id="auth-error" style="color: #990000; font-size: 0.82rem; margin-top: 14px; font-weight: 500;"></div>
             </div>
 
-            <!-- DYNAMIC EVENTS RENDERED BY JSON -->
             <div id="events-container" style="display: none;">
                 <p style="font-family: 'Cormorant Garamond', serif; font-variant: small-caps; font-size: 1.3rem; color: var(--ink); font-weight: 600; letter-spacing: 1px;" id="welcome-message"></p>
                 <p style="font-family: 'Cormorant Garamond', serif; font-size: 1rem; color: var(--ink-soft); margin-bottom: 28px;">Please see the details of our celebration below.</p>
 
                 <div id="dynamic-events"></div>
 
-                <div class="divider"></div>
-                <textarea id="dietary" rows="3" placeholder="Dietary requirements or special notes..."></textarea>
-                <button class="btn-primary" onclick="submitRSVP()" id="submitBtn">Send RSVP</button>
-                <div id="status-msg" style="margin-top: 15px; font-size: 0.9rem; font-weight: 500;"></div>
+                <div id="rsvp-footer">
+                    <div class="divider"></div>
+                    <textarea id="dietary" rows="3" placeholder="Dietary requirements or special notes..."></textarea>
+                    <button class="btn-primary" onclick="submitRSVP()" id="submitBtn">Send RSVP</button>
+                    <div id="status-msg" style="margin-top: 15px; font-size: 0.9rem; font-weight: 500;"></div>
+                </div>
             </div>
 
             <svg class="medallion bottom"><use href="#ornament-medallion"/></svg>
@@ -423,7 +364,6 @@
 </div>
 
 <script>
-    // 1. GLOBAL APP CONFIGURATION
     const AppData = {
         scriptUrl: "https://script.google.com/macros/s/AKfycbyY0A0_NZGJCfGli4bRGlHGhD1gFzI4FpVwedfzMcrR_ivo_k1eoS5x7jk3U6_mdhgo/exec",
         couple: { name1: "Aditya", name2: "Neha" },
@@ -446,18 +386,24 @@
         document.getElementById('inviteCode').value = urlParams.get('code');
     }
 
+    // simple, reliable reveal — opacity/transform only, no clip-path 3D flip
     function openEnvelope() {
-        const env = document.getElementById('envelope');
-        env.classList.add('open');
-        document.getElementById('scroll-prompt').style.opacity = '1';
-        document.getElementById('app-container').style.display = 'block';
+        const card = document.getElementById('envelope-card');
+        const hero = document.getElementById('hero-scene');
+        const app = document.getElementById('app-container');
+
+        card.classList.add('breaking');
 
         setTimeout(() => {
-            document.getElementById('app-container').scrollIntoView({ behavior: 'smooth' });
+            hero.classList.add('dismissed');
+            app.style.display = 'block';
+            void app.offsetWidth; // force reflow so the transition actually plays
+            app.classList.add('visible');
+
             if (document.getElementById('inviteCode').value) {
-                setTimeout(verifyPasscode, 500);
+                setTimeout(verifyPasscode, 300);
             }
-        }, 1500);
+        }, 450);
     }
 
     function verifyPasscode() {
@@ -482,6 +428,7 @@
                     const data = JSON.parse(text);
                     if (data.found) {
                         AppData.guest = data;
+                        console.log("Guest record:", data); // helpful for checking which flags are set
                         document.getElementById('auth-section').style.display = 'none';
                         document.getElementById('events-container').style.display = 'block';
                         document.getElementById('welcome-message').innerText = `To: ${data.name}`;
@@ -505,6 +452,7 @@
 
     function renderEvents() {
         const container = document.getElementById('dynamic-events');
+        const footer = document.getElementById('rsvp-footer');
         container.innerHTML = "";
 
         const guestPermissions = [
@@ -512,6 +460,16 @@
             { allowed: AppData.guest.wedding, data: AppData.events.wedding },
             { allowed: AppData.guest.reception, data: AppData.events.reception }
         ];
+
+        const anyAllowed = guestPermissions.some(e => e.allowed);
+
+        if (!anyAllowed) {
+            // Data fallback: this guest's row has no events marked YES in the sheet
+            container.innerHTML = `<div class="no-events-note">We don't see any events marked on your invitation yet — if this looks wrong, please reach out to us directly and we'll sort it out.</div>`;
+            footer.style.display = 'none';
+            return;
+        }
+        footer.style.display = 'block';
 
         guestPermissions.forEach(event => {
             if (event.allowed) {
