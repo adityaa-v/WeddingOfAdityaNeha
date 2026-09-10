@@ -29,7 +29,8 @@
         }
 
         /* =========================================
-           HERO / SEAL
+           HERO — simplified, reliable reveal
+           (opacity/transform only, no clip-path animation)
            ========================================= */
         #hero-scene {
             position: relative;
@@ -46,8 +47,11 @@
             transition: opacity 0.6s ease, visibility 0.6s;
         }
         #hero-scene.dismissed {
-            opacity: 0; visibility: hidden; pointer-events: none;
-            position: absolute; top: 0; left: 0;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            position: absolute;
+            top: 0; left: 0;
         }
 
         .envelope-card {
@@ -59,7 +63,10 @@
             box-shadow: 0 18px 40px rgba(54,36,25,0.14);
             transition: transform 0.5s ease, opacity 0.5s ease;
         }
-        .envelope-card.breaking { transform: scale(0.94); opacity: 0; }
+        .envelope-card.breaking {
+            transform: scale(0.94);
+            opacity: 0;
+        }
 
         .preview-ganesha { color: var(--maroon); font-size: 0.8rem; margin-bottom: 14px; }
         .preview-names {
@@ -102,35 +109,28 @@
             transform: translateY(24px);
             transition: opacity 0.7s ease, transform 0.7s ease;
             width: 100%;
-            max-width: 620px;
+            max-width: 560px;
             margin: 0 auto;
             background:
                 radial-gradient(circle at 15% 10%, rgba(184,134,59,0.05), transparent 40%),
                 radial-gradient(circle at 85% 90%, rgba(122,0,22,0.04), transparent 40%),
                 var(--ivory);
             min-height: 100vh;
-            padding: 24px 10px 60px;
+            padding: 36px 18px 60px;
             box-sizing: border-box;
         }
         #app-container.visible { opacity: 1; transform: translateY(0); }
 
-        .frame-outer { position: relative; padding: 18px; }
-
-        /* jaali / lattice pattern band — coded, no image upload needed */
-        .pattern-frame {
+        .frame-outer {
             position: relative;
-            padding: 16px;
-            background-color: var(--card);
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cg fill='none' stroke='%23b8863b' stroke-width='0.7' opacity='0.55'%3E%3Cpath d='M12 1 L23 12 L12 23 L1 12 Z'/%3E%3Ccircle cx='12' cy='12' r='1.4'/%3E%3C/g%3E%3C/svg%3E");
-            background-repeat: repeat;
-            border: 1px solid var(--gold);
+            padding: 30px;
         }
 
         .app-inner {
             position: relative;
             background: var(--card);
             border: 1px solid var(--gold);
-            padding: 50px 28px 40px;
+            padding: 50px 32px 40px;
             text-align: center;
         }
         .app-inner::after {
@@ -141,11 +141,16 @@
             pointer-events: none;
         }
 
-        .corner-ornament { position: absolute; width: 42px; height: 42px; color: var(--gold); z-index: 3; }
-        .corner-tl { top: -6px; left: -6px; }
-        .corner-tr { top: -6px; right: -6px; transform: scaleX(-1); }
-        .corner-bl { bottom: -6px; left: -6px; transform: scaleY(-1); }
-        .corner-br { bottom: -6px; right: -6px; transform: scale(-1,-1); }
+        .corner-ornament {
+            position: absolute;
+            width: 42px; height: 42px;
+            color: var(--gold);
+            z-index: 2;
+        }
+        .corner-tl { top: -8px; left: -8px; }
+        .corner-tr { top: -8px; right: -8px; transform: scaleX(-1); }
+        .corner-bl { bottom: -8px; left: -8px; transform: scaleY(-1); }
+        .corner-br { bottom: -8px; right: -8px; transform: scale(-1,-1); }
 
         .medallion { width: 44px; height: 44px; color: var(--gold); margin: 0 auto; }
         .medallion.top { margin-bottom: 18px; }
@@ -243,14 +248,6 @@
             margin: 20px 0;
         }
 
-        .editing-note {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.78rem;
-            color: var(--gold-deep);
-            margin-bottom: 20px;
-            letter-spacing: 0.5px;
-        }
-
         input[type="text"], textarea {
             width: 100%;
             padding: 13px;
@@ -284,21 +281,13 @@
         .btn-primary:disabled { background: #c9b6a8; cursor: not-allowed; }
 
         #status-msg, #auth-error { font-family: 'Montserrat', sans-serif; }
-
-        /* full-bleed on small screens — the frame stretches closer to the edges */
-        @media (max-width: 480px) {
-            #app-container { padding: 14px 4px 50px; }
-            .frame-outer { padding: 6px; }
-            .pattern-frame { padding: 10px; }
-            .app-inner { padding: 42px 14px 32px; }
-            h1.couple-name { font-size: 2.5rem; }
-        }
     </style>
 </head>
 <body>
 
 <svg width="0" height="0" style="position:absolute">
   <defs>
+    <!-- restrained single-curve vine, 2 leaves, 1 bud — replaces the previous tangled version -->
     <symbol id="ornament-corner" viewBox="0 0 60 60">
       <path d="M6,6 C 18,10 14,24 28,22" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/>
       <ellipse cx="14" cy="12" rx="5" ry="2.4" transform="rotate(-25 14 12)" fill="none" stroke="currentColor" stroke-width="1"/>
@@ -319,6 +308,7 @@
   </defs>
 </svg>
 
+<!-- HERO / SEAL -->
 <div id="hero-scene">
     <div class="envelope-card" id="envelope-card">
         <div class="preview-ganesha">॥ श्री गणेशाय नमः ॥</div>
@@ -328,6 +318,7 @@
     </div>
 </div>
 
+<!-- MAIN CARD -->
 <div id="app-container">
     <div class="frame-outer">
         <svg class="corner-ornament corner-tl"><use href="#ornament-corner"/></svg>
@@ -335,49 +326,46 @@
         <svg class="corner-ornament corner-bl"><use href="#ornament-corner"/></svg>
         <svg class="corner-ornament corner-br"><use href="#ornament-corner"/></svg>
 
-        <div class="pattern-frame">
-            <div class="app-inner">
-                <svg class="medallion top"><use href="#ornament-medallion"/></svg>
+        <div class="app-inner">
+            <svg class="medallion top"><use href="#ornament-medallion"/></svg>
 
-                <div class="ganesha-mark">॥ श्री गणेशाय नमः ॥</div>
-                <div class="pre-title" id="ui-tagline"></div>
-                <h1 class="couple-name" id="ui-name1"></h1>
-                <span class="ampersand">&amp;</span>
-                <h1 class="couple-name" id="ui-name2"></h1>
+            <div class="ganesha-mark">॥ श्री गणेशाय नमः ॥</div>
+            <div class="pre-title" id="ui-tagline"></div>
+            <h1 class="couple-name" id="ui-name1"></h1>
+            <span class="ampersand">&amp;</span>
+            <h1 class="couple-name" id="ui-name2"></h1>
 
-                <div class="divider"></div>
+            <div class="divider"></div>
 
-                <div id="auth-section">
-                    <div class="pre-title" style="margin-bottom: 14px; color: var(--ink-soft);">Your Invitation</div>
-                    <input type="text" id="inviteCode" placeholder="ENTER YOUR PASSCODE" style="text-transform: uppercase;">
-                    <button class="btn-primary" onclick="verifyPasscode()">Unlock Details</button>
-                    <div id="auth-error" style="color: #990000; font-size: 0.82rem; margin-top: 14px; font-weight: 500;"></div>
-                </div>
-
-                <div id="events-container" style="display: none;">
-                    <p style="font-family: 'Cormorant Garamond', serif; font-variant: small-caps; font-size: 1.3rem; color: var(--ink); font-weight: 600; letter-spacing: 1px;" id="welcome-message"></p>
-                    <p style="font-family: 'Cormorant Garamond', serif; font-size: 1rem; color: var(--ink-soft); margin-bottom: 10px;">Please see the details of our celebration below.</p>
-                    <p class="editing-note" id="editing-note" style="display:none;">You've already responded — feel free to update your answers below.</p>
-
-                    <div id="dynamic-events"></div>
-
-                    <div id="rsvp-footer">
-                        <div class="divider"></div>
-                        <textarea id="dietary" rows="3" placeholder="Dietary requirements or special notes..."></textarea>
-                        <button class="btn-primary" onclick="submitRSVP()" id="submitBtn">Send RSVP</button>
-                        <div id="status-msg" style="margin-top: 15px; font-size: 0.9rem; font-weight: 500;"></div>
-                    </div>
-                </div>
-
-                <svg class="medallion bottom"><use href="#ornament-medallion"/></svg>
+            <div id="auth-section">
+                <div class="pre-title" style="margin-bottom: 14px; color: var(--ink-soft);">Your Invitation</div>
+                <input type="text" id="inviteCode" placeholder="ENTER YOUR PASSCODE" style="text-transform: uppercase;">
+                <button class="btn-primary" onclick="verifyPasscode()">Unlock Details</button>
+                <div id="auth-error" style="color: #990000; font-size: 0.82rem; margin-top: 14px; font-weight: 500;"></div>
             </div>
+
+            <div id="events-container" style="display: none;">
+                <p style="font-family: 'Cormorant Garamond', serif; font-variant: small-caps; font-size: 1.3rem; color: var(--ink); font-weight: 600; letter-spacing: 1px;" id="welcome-message"></p>
+                <p style="font-family: 'Cormorant Garamond', serif; font-size: 1rem; color: var(--ink-soft); margin-bottom: 28px;">Please see the details of our celebration below.</p>
+
+                <div id="dynamic-events"></div>
+
+                <div id="rsvp-footer">
+                    <div class="divider"></div>
+                    <textarea id="dietary" rows="3" placeholder="Dietary requirements or special notes..."></textarea>
+                    <button class="btn-primary" onclick="submitRSVP()" id="submitBtn">Send RSVP</button>
+                    <div id="status-msg" style="margin-top: 15px; font-size: 0.9rem; font-weight: 500;"></div>
+                </div>
+            </div>
+
+            <svg class="medallion bottom"><use href="#ornament-medallion"/></svg>
         </div>
     </div>
 </div>
 
 <script>
     const AppData = {
-        scriptUrl: "https://script.google.com/macros/s/AKfycbwLBKsk0DAbKKyplZnYNeuk1XE0zB-gMhQ5ir4-9JBATtRgyTAzbEUbi-amkLuAJW4F/exec", // update after you redeploy the new Apps Script
+        scriptUrl: "https://script.google.com/macros/s/AKfycbwLBKsk0DAbKKyplZnYNeuk1XE0zB-gMhQ5ir4-9JBATtRgyTAzbEUbi-amkLuAJW4F/exec",
         couple: { name1: "Aditya", name2: "Neha" },
         tagline: "joyfully invite you to celebrate the wedding of",
         events: {
@@ -386,8 +374,7 @@
             reception: { id: "reception", title: "Wedding Reception", date: "Saturday, November 20", time: "6:00 PM", venue: "Fontana Amorosa" }
         },
         guest: null,
-        rsvpState: {},
-        isEditing: false
+        rsvpState: {}
     };
 
     document.getElementById('ui-tagline').innerText = AppData.tagline;
@@ -399,6 +386,7 @@
         document.getElementById('inviteCode').value = urlParams.get('code');
     }
 
+    // simple, reliable reveal — opacity/transform only, no clip-path 3D flip
     function openEnvelope() {
         const card = document.getElementById('envelope-card');
         const hero = document.getElementById('hero-scene');
@@ -409,7 +397,7 @@
         setTimeout(() => {
             hero.classList.add('dismissed');
             app.style.display = 'block';
-            void app.offsetWidth;
+            void app.offsetWidth; // force reflow so the transition actually plays
             app.classList.add('visible');
 
             if (document.getElementById('inviteCode').value) {
@@ -440,7 +428,7 @@
                     const data = JSON.parse(text);
                     if (data.found) {
                         AppData.guest = data;
-                        console.log("Guest record:", data);
+                        console.log("Guest record:", data); // helpful for checking which flags are set
                         document.getElementById('auth-section').style.display = 'none';
                         document.getElementById('events-container').style.display = 'block';
                         document.getElementById('welcome-message').innerText = `To: ${data.name}`;
@@ -465,22 +453,18 @@
     function renderEvents() {
         const container = document.getElementById('dynamic-events');
         const footer = document.getElementById('rsvp-footer');
-        const editingNote = document.getElementById('editing-note');
         container.innerHTML = "";
 
-        const prev = AppData.guest.previousResponse;
-        AppData.isEditing = !!prev;
-        editingNote.style.display = AppData.isEditing ? 'block' : 'none';
-
         const guestPermissions = [
-            { allowed: AppData.guest.haldi || AppData.guest.mehndi, data: AppData.events.haldi, prevValue: prev ? prev.haldi : null },
-            { allowed: AppData.guest.wedding, data: AppData.events.wedding, prevValue: prev ? prev.wedding : null },
-            { allowed: AppData.guest.reception, data: AppData.events.reception, prevValue: prev ? prev.reception : null }
+            { allowed: AppData.guest.haldi || AppData.guest.mehndi, data: AppData.events.haldi },
+            { allowed: AppData.guest.wedding, data: AppData.events.wedding },
+            { allowed: AppData.guest.reception, data: AppData.events.reception }
         ];
 
         const anyAllowed = guestPermissions.some(e => e.allowed);
 
         if (!anyAllowed) {
+            // Data fallback: this guest's row has no events marked YES in the sheet
             container.innerHTML = `<div class="no-events-note">We don't see any events marked on your invitation yet — if this looks wrong, please reach out to us directly and we'll sort it out.</div>`;
             footer.style.display = 'none';
             return;
@@ -489,7 +473,7 @@
 
         guestPermissions.forEach(event => {
             if (event.allowed) {
-                AppData.rsvpState[event.data.id] = event.prevValue && event.prevValue !== "N/A" ? event.prevValue : "N/A";
+                AppData.rsvpState[event.data.id] = "N/A";
 
                 const eventHTML = `
                     <div class="event-block">
@@ -508,19 +492,6 @@
                 container.innerHTML += eventHTML;
             }
         });
-
-        // re-apply the visual "selected" state for any pre-filled answers
-        guestPermissions.forEach(event => {
-            if (event.allowed && AppData.rsvpState[event.data.id] !== "N/A") {
-                setRsvp(event.data.id, AppData.rsvpState[event.data.id]);
-            }
-        });
-
-        if (prev && prev.dietary && prev.dietary !== "None") {
-            document.getElementById('dietary').value = prev.dietary;
-        }
-
-        document.getElementById('submitBtn').innerText = AppData.isEditing ? "Update RSVP" : "Send RSVP";
     }
 
     function setRsvp(eventId, status) {
@@ -565,15 +536,13 @@
         })
         .then(() => {
             msg.style.color = "green";
-            msg.innerText = AppData.isEditing ? "Your RSVP has been updated. Thank you!" : "Thank you! Your RSVP has been recorded.";
-            btn.disabled = false;
-            btn.innerText = "Update RSVP";
-            AppData.isEditing = true;
+            msg.innerText = "Thank you! Your RSVP has been recorded.";
+            btn.style.display = "none";
         })
         .catch(() => {
             msg.style.color = "#990000";
             msg.innerText = "Error sending RSVP. Please try again.";
-            btn.innerText = AppData.isEditing ? "Update RSVP" : "Send RSVP";
+            btn.innerText = "Send RSVP";
             btn.disabled = false;
         });
     }
