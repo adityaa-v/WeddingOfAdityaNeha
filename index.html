@@ -20,103 +20,121 @@
         * { box-sizing: border-box; }
 
         body, html {
-            margin: 0; padding: 0;
-            background-color: var(--ivory);
-            font-family: 'Montserrat', sans-serif;
-            color: var(--ink);
-            overflow-x: hidden;
-            scroll-behavior: smooth;
+                    margin: 0; padding: 0;
+                    background-color: transparent; /* Changed from var(--ivory) so the image shows through */
+                    font-family: 'Montserrat', sans-serif;
+                    color: var(--ink);
+                    overflow-x: hidden;
+                    scroll-behavior: smooth;
+                }
+
+        /* =========================================
+           BACKGROUND (SWAP URL HERE)
+           ========================================= */
+        .page-bg {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            /* Placeholder Kerala Image from Unsplash */
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?q=80&w=2000&auto=format&fit=crop') center/cover no-repeat;
+            z-index: -1;
         }
 
         /* =========================================
-           HERO / SEAL
+           HERO / 3D CARD COVER
            ========================================= */
         #hero-scene {
-            position: relative;
-            min-height: 100vh;
-            width: 100vw;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 10;
-            background:
-                radial-gradient(circle at 20% 20%, rgba(184,134,59,0.06), transparent 45%),
-                radial-gradient(circle at 80% 75%, rgba(122,0,22,0.05), transparent 45%),
-                var(--ivory);
-            transition: opacity 0.6s ease, visibility 0.6s;
+            z-index: 50;
+            /* Creates the 3D space for the flip */
+            perspective: 1200px; 
+            transition: visibility 1.2s;
         }
+
         #hero-scene.dismissed {
-            opacity: 0; visibility: hidden; pointer-events: none;
-            position: absolute; top: 0; left: 0;
+            visibility: hidden;
+            pointer-events: none;
         }
 
         .envelope-card {
-            width: 280px;
-            padding: 40px 24px;
+            width: 320px;
+            height: 480px;
+            padding: 50px 24px;
             background: var(--card);
-            border: 1px solid var(--gold);
+            border: 2px solid var(--gold);
             text-align: center;
-            box-shadow: 0 18px 40px rgba(54,36,25,0.14);
-            transition: transform 0.5s ease, opacity 0.5s ease;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            
+            /* The Flip Animation Settings */
+            transform-origin: left center;
+            transition: transform 1.2s cubic-bezier(0.4, 0.0, 0.2, 1), opacity 0.8s ease 0.3s;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
-        .envelope-card.breaking { transform: scale(0.94); opacity: 0; }
 
-        .preview-ganesha { color: var(--maroon); font-size: 0.8rem; margin-bottom: 14px; }
+        /* When the seal is clicked, it opens like a book and fades out */
+        .envelope-card.breaking { 
+            transform: rotateY(-110deg) scale(0.95); 
+            opacity: 0; 
+        }
+
+        .preview-ganesha { color: var(--maroon); font-size: 0.9rem; margin-bottom: 24px; }
         .preview-names {
             font-family: 'Cormorant Garamond', serif;
             font-variant: small-caps;
             letter-spacing: 2px;
-            font-size: 1.7rem;
+            font-size: 2.2rem;
             color: var(--ink);
             line-height: 1.35;
+            margin-bottom: 30px;
         }
 
         .wax-seal {
-            width: 58px; height: 58px;
-            margin: 26px auto 0;
+            width: 70px; height: 70px;
             background: radial-gradient(circle, #7a0016 0%, #4a000d 100%);
             border-radius: 50%;
             cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3), inset 0 0 5px rgba(255,255,255,0.15);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4), inset 0 0 5px rgba(255,255,255,0.2);
             display: flex; justify-content: center; align-items: center;
-            color: var(--gold-tint); font-family: 'Cinzel', serif; font-size: 1rem; font-weight: 600; letter-spacing: 1px;
+            color: var(--gold-tint); font-family: 'Cinzel', serif; font-size: 1.2rem; font-weight: 600; letter-spacing: 1px;
             transition: transform 0.25s ease;
         }
+        .wax-seal:hover { transform: scale(1.05); }
         .wax-seal:active { transform: scale(0.9); }
 
         .tap-hint {
             font-family: 'Cinzel', serif;
-            font-size: 0.62rem;
+            font-size: 0.65rem;
             letter-spacing: 2.5px;
             text-transform: uppercase;
             color: var(--gold-deep);
-            margin-top: 12px;
+            margin-top: 16px;
         }
 
         /* =========================================
-           MAIN CARD
+           MAIN CARD (RSVP APP)
            ========================================= */
         #app-container {
-            display: none;
-            opacity: 0;
-            transform: translateY(24px);
-            transition: opacity 0.7s ease, transform 0.7s ease;
-            width: 100%;
-            max-width: 620px;
-            margin: 0 auto;
-            background:
-                radial-gradient(circle at 15% 10%, rgba(184,134,59,0.05), transparent 40%),
-                radial-gradient(circle at 85% 90%, rgba(122,0,22,0.04), transparent 40%),
-                var(--ivory);
-            min-height: 100vh;
-            padding: 24px 10px 60px;
-            box-sizing: border-box;
-        }
+                    display: none;
+                    opacity: 0;
+                    transform: translateY(30px);
+                    transition: opacity 0.8s ease 0.4s, transform 0.8s ease 0.4s;
+                    width: 100%;
+                    max-width: 620px;
+                    margin: 40px auto;
+                    position: relative;
+                    z-index: 10;
+                    background: transparent; /* Ensures no solid gradient or color overrides the image here */
+                }
         #app-container.visible { opacity: 1; transform: translateY(0); }
 
         .frame-outer { position: relative; padding: 18px; }
 
-        /* jaali / lattice pattern band — coded, no image upload needed */
         .pattern-frame {
             position: relative;
             padding: 16px;
@@ -124,6 +142,7 @@
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cg fill='none' stroke='%23b8863b' stroke-width='0.7' opacity='0.55'%3E%3Cpath d='M12 1 L23 12 L12 23 L1 12 Z'/%3E%3Ccircle cx='12' cy='12' r='1.4'/%3E%3C/g%3E%3C/svg%3E");
             background-repeat: repeat;
             border: 1px solid var(--gold);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
         }
 
         .app-inner {
@@ -285,17 +304,20 @@
 
         #status-msg, #auth-error { font-family: 'Montserrat', sans-serif; }
 
-        /* full-bleed on small screens — the frame stretches closer to the edges */
         @media (max-width: 480px) {
-            #app-container { padding: 14px 4px 50px; }
+            #app-container { padding: 14px 10px 50px; margin: 20px auto; }
             .frame-outer { padding: 6px; }
             .pattern-frame { padding: 10px; }
             .app-inner { padding: 42px 14px 32px; }
             h1.couple-name { font-size: 2.5rem; }
+            
+            .envelope-card { width: 280px; height: 440px; }
         }
     </style>
 </head>
 <body>
+
+<div class="page-bg"></div>
 
 <svg width="0" height="0" style="position:absolute">
   <defs>
@@ -322,7 +344,7 @@
 <div id="hero-scene">
     <div class="envelope-card" id="envelope-card">
         <div class="preview-ganesha">॥ श्री गणेशाय नमः ॥</div>
-        <div class="preview-names">Aditya &amp; Neha</div>
+        <div class="preview-names">Aditya<br>&amp;<br>Neha</div>
         <div class="wax-seal" onclick="openEnvelope()">A&amp;N</div>
         <div class="tap-hint">Tap the seal to open</div>
     </div>
@@ -404,8 +426,10 @@
         const hero = document.getElementById('hero-scene');
         const app = document.getElementById('app-container');
 
+        // Triggers the 3D CSS flip
         card.classList.add('breaking');
 
+        // Wait for the flip animation to finish before showing the RSVP details
         setTimeout(() => {
             hero.classList.add('dismissed');
             app.style.display = 'block';
@@ -415,7 +439,7 @@
             if (document.getElementById('inviteCode').value) {
                 setTimeout(verifyPasscode, 300);
             }
-        }, 450);
+        }, 800);
     }
 
     function verifyPasscode() {
@@ -440,7 +464,6 @@
                     const data = JSON.parse(text);
                     if (data.found) {
                         AppData.guest = data;
-                        console.log("Guest record:", data);
                         document.getElementById('auth-section').style.display = 'none';
                         document.getElementById('events-container').style.display = 'block';
                         document.getElementById('welcome-message').innerText = `To: ${data.name}`;
@@ -452,13 +475,11 @@
                 } catch (e) {
                     err.style.color = "#990000";
                     err.innerText = "Connection error — got a non-JSON response.";
-                    console.error("Non-JSON response:", text);
                 }
             })
             .catch(err2 => {
                 err.style.color = "#990000";
                 err.innerText = "Network error. Please try again.";
-                console.error("Fetch error:", err2);
             });
     }
 
@@ -509,7 +530,6 @@
             }
         });
 
-        // re-apply the visual "selected" state for any pre-filled answers
         guestPermissions.forEach(event => {
             if (event.allowed && AppData.rsvpState[event.data.id] !== "N/A") {
                 setRsvp(event.data.id, AppData.rsvpState[event.data.id]);
