@@ -20,28 +20,21 @@
         * { box-sizing: border-box; }
 
         body, html {
-                    margin: 0; padding: 0;
-                    background-color: transparent; /* Changed from var(--ivory) so the image shows through */
-                    font-family: 'Montserrat', sans-serif;
-                    color: var(--ink);
-                    overflow-x: hidden;
-                    scroll-behavior: smooth;
-                }
+            margin: 0; padding: 0;
+            background-color: transparent;
+            font-family: 'Montserrat', sans-serif;
+            color: var(--ink);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
 
-        /* =========================================
-           BACKGROUND (SWAP URL HERE)
-           ========================================= */
         .page-bg {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
-            /* Placeholder Kerala Image from Unsplash */
             background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?q=80&w=2000&auto=format&fit=crop') center/cover no-repeat;
             z-index: -1;
         }
 
-        /* =========================================
-           HERO / 3D CARD COVER
-           ========================================= */
         #hero-scene {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -49,15 +42,10 @@
             justify-content: center;
             align-items: center;
             z-index: 50;
-            /* Creates the 3D space for the flip */
-            perspective: 1200px; 
+            perspective: 1200px;
             transition: visibility 1.2s;
         }
-
-        #hero-scene.dismissed {
-            visibility: hidden;
-            pointer-events: none;
-        }
+        #hero-scene.dismissed { visibility: hidden; pointer-events: none; }
 
         .envelope-card {
             width: 320px;
@@ -67,8 +55,6 @@
             border: 2px solid var(--gold);
             text-align: center;
             box-shadow: 0 25px 50px rgba(0,0,0,0.5);
-            
-            /* The Flip Animation Settings */
             transform-origin: left center;
             transition: transform 1.2s cubic-bezier(0.4, 0.0, 0.2, 1), opacity 0.8s ease 0.3s;
             display: flex;
@@ -76,12 +62,7 @@
             justify-content: center;
             align-items: center;
         }
-
-        /* When the seal is clicked, it opens like a book and fades out */
-        .envelope-card.breaking { 
-            transform: rotateY(-110deg) scale(0.95); 
-            opacity: 0; 
-        }
+        .envelope-card.breaking { transform: rotateY(-110deg) scale(0.95); opacity: 0; }
 
         .preview-ganesha { color: var(--maroon); font-size: 0.9rem; margin-bottom: 24px; }
         .preview-names {
@@ -116,21 +97,36 @@
             margin-top: 16px;
         }
 
-        /* =========================================
-           MAIN CARD (RSVP APP)
-           ========================================= */
+        /* mute toggle */
+        #music-toggle {
+            position: fixed;
+            top: 16px; right: 16px;
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            background: var(--card);
+            border: 1px solid var(--gold);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            cursor: pointer;
+            z-index: 70;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+        }
+        #music-toggle.visible { display: flex; }
+
         #app-container {
-                    display: none;
-                    opacity: 0;
-                    transform: translateY(30px);
-                    transition: opacity 0.8s ease 0.4s, transform 0.8s ease 0.4s;
-                    width: 100%;
-                    max-width: 620px;
-                    margin: 40px auto;
-                    position: relative;
-                    z-index: 10;
-                    background: transparent; /* Ensures no solid gradient or color overrides the image here */
-                }
+            display: none;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease 0.4s, transform 0.8s ease 0.4s;
+            width: 100%;
+            max-width: 620px;
+            margin: 40px auto;
+            position: relative;
+            z-index: 10;
+            background: transparent;
+        }
         #app-container.visible { opacity: 1; transform: translateY(0); }
 
         .frame-outer { position: relative; padding: 18px; }
@@ -202,10 +198,43 @@
 
         .divider { width: 54px; height: 1px; background: var(--gold); margin: 30px auto; }
 
+        .cover-image {
+            width: 100%;
+            max-width: 320px;
+            border-radius: 4px;
+            border: 1px solid var(--gold-tint);
+            margin: 0 auto 22px;
+            display: block;
+        }
+
         /* =========================================
-           RSVP INTERFACE
+           GROUP / RSVP INTERFACE
            ========================================= */
-        .event-block { margin: 34px 0; }
+        .member-block {
+            margin: 38px 0;
+            padding-top: 24px;
+            border-top: 1px solid var(--gold-tint);
+        }
+        .member-block:first-child { border-top: none; padding-top: 0; }
+
+        .member-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-variant: small-caps;
+            font-weight: 600;
+            font-size: 1.7rem;
+            color: var(--ink);
+            margin-bottom: 18px;
+        }
+
+        .event-block { margin: 26px 0; }
+
+        .event-image {
+            width: 100%;
+            border-radius: 4px;
+            border: 1px solid var(--gold-tint);
+            margin-bottom: 14px;
+            display: block;
+        }
 
         .event-title {
             font-family: 'Cormorant Garamond', serif;
@@ -256,10 +285,10 @@
             font-family: 'Cormorant Garamond', serif;
             font-size: 1rem;
             color: var(--ink-soft);
-            padding: 20px 10px;
+            padding: 14px 10px;
             border-top: 1px solid var(--gold-tint);
             border-bottom: 1px solid var(--gold-tint);
-            margin: 20px 0;
+            margin: 14px 0;
         }
 
         .editing-note {
@@ -310,7 +339,6 @@
             .pattern-frame { padding: 10px; }
             .app-inner { padding: 42px 14px 32px; }
             h1.couple-name { font-size: 2.5rem; }
-            
             .envelope-card { width: 280px; height: 440px; }
         }
     </style>
@@ -318,6 +346,12 @@
 <body>
 
 <div class="page-bg"></div>
+
+<!-- Upload your song file to your repo as assets/song.mp3 -->
+<audio id="bg-music" loop preload="none">
+    <source src="assets/song.mp3" type="audio/mpeg">
+</audio>
+<div id="music-toggle" onclick="toggleMusic()">🔊</div>
 
 <svg width="0" height="0" style="position:absolute">
   <defs>
@@ -370,9 +404,11 @@
                 <div class="divider"></div>
 
                 <div id="auth-section">
+                    <!-- Upload a general stock photo to your repo as assets/cover.jpg -->
+                    <img src="assets/cover.jpg" alt="" class="cover-image" onerror="this.style.display='none'">
                     <div class="pre-title" style="margin-bottom: 14px; color: var(--ink-soft);">Your Invitation</div>
-                    <input type="text" id="inviteCode" placeholder="ENTER YOUR PASSCODE" style="text-transform: uppercase;">
-                    <button class="btn-primary" onclick="verifyPasscode()">Unlock Details</button>
+                    <input type="text" id="inviteName" placeholder="ENTER YOUR FULL NAME">
+                    <button class="btn-primary" onclick="verifyGuest()">Unlock Details</button>
                     <div id="auth-error" style="color: #990000; font-size: 0.82rem; margin-top: 14px; font-weight: 500;"></div>
                 </div>
 
@@ -381,11 +417,11 @@
                     <p style="font-family: 'Cormorant Garamond', serif; font-size: 1rem; color: var(--ink-soft); margin-bottom: 10px;">Please see the details of our celebration below.</p>
                     <p class="editing-note" id="editing-note" style="display:none;">You've already responded — feel free to update your answers below.</p>
 
-                    <div id="dynamic-events"></div>
+                    <div id="members-container"></div>
 
                     <div id="rsvp-footer">
                         <div class="divider"></div>
-                        <textarea id="dietary" rows="3" placeholder="Dietary requirements or special notes..."></textarea>
+                        <textarea id="dietary" rows="3" placeholder="Dietary requirements or special notes for your family..."></textarea>
                         <button class="btn-primary" onclick="submitRSVP()" id="submitBtn">Send RSVP</button>
                         <div id="status-msg" style="margin-top: 15px; font-size: 0.9rem; font-weight: 500;"></div>
                     </div>
@@ -399,16 +435,18 @@
 
 <script>
     const AppData = {
-        scriptUrl: "https://script.google.com/macros/s/AKfycbwLBKsk0DAbKKyplZnYNeuk1XE0zB-gMhQ5ir4-9JBATtRgyTAzbEUbi-amkLuAJW4F/exec", // update after you redeploy the new Apps Script
+        scriptUrl: "https://script.google.com/macros/s/AKfycbwbIQhxyy0ytZuuXT71UxjtvRPJahiChuFoD6KSGnpbWN8UzCYKpJXxEwAfM4J0jymv/exec", // redeploy after updating the Apps Script, then paste the new URL here
         couple: { name1: "Aditya", name2: "Neha" },
         tagline: "joyfully invite you to celebrate the wedding of",
         events: {
-            haldi: { id: "haldi", title: "Haldi & Mehndi", date: "Monday, November 16", time: "4:00 PM", venue: "Family Residence" },
-            wedding: { id: "wedding", title: "Wedding Ceremony", date: "Thursday, November 18", time: "10:30 AM", venue: "The Epping Club" },
-            reception: { id: "reception", title: "Wedding Reception", date: "Saturday, November 20", time: "6:00 PM", venue: "Fontana Amorosa" }
+            // Upload these two images to your repo under assets/ with these exact names, or change the paths.
+            haldi: { id: "haldi", title: "Haldi & Mehndi", date: "Monday, November 16", time: "4:00 PM", venue: "Family Residence", image: "assets/haldi-invite.jpg" },
+            wedding: { id: "wedding", title: "Wedding Ceremony", date: "Thursday, November 18", time: "10:30 AM", venue: "The Epping Club", image: "assets/wedding-invite.jpg" },
+            reception: { id: "reception", title: "Wedding Reception", date: "Saturday, November 20", time: "6:00 PM", venue: "Fontana Amorosa", image: null }
         },
-        guest: null,
-        rsvpState: {},
+        group: null,
+        members: [],
+        rsvpState: {}, // keyed as `${code}_${eventId}`
         isEditing: false
     };
 
@@ -417,45 +455,65 @@
     document.getElementById('ui-name2').innerText = AppData.couple.name2;
 
     const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('code')) {
-        document.getElementById('inviteCode').value = urlParams.get('code');
+    if (urlParams.get('name')) {
+        document.getElementById('inviteName').value = urlParams.get('name');
+    }
+
+    function toggleMusic() {
+        const audio = document.getElementById('bg-music');
+        const btn = document.getElementById('music-toggle');
+        if (audio.paused) {
+            audio.play().catch(() => {});
+            btn.innerText = '🔊';
+        } else {
+            audio.pause();
+            btn.innerText = '🔇';
+        }
     }
 
     function openEnvelope() {
         const card = document.getElementById('envelope-card');
         const hero = document.getElementById('hero-scene');
         const app = document.getElementById('app-container');
+        const audio = document.getElementById('bg-music');
+        const musicBtn = document.getElementById('music-toggle');
 
-        // Triggers the 3D CSS flip
+        // this click is a real user gesture, so autoplay-with-sound is allowed here
+        audio.volume = 0.45;
+        audio.play().then(() => {
+            musicBtn.classList.add('visible');
+        }).catch(() => {
+            // file may be missing or blocked — fail silently, just don't show the toggle
+        });
+
         card.classList.add('breaking');
 
-        // Wait for the flip animation to finish before showing the RSVP details
         setTimeout(() => {
             hero.classList.add('dismissed');
             app.style.display = 'block';
             void app.offsetWidth;
             app.classList.add('visible');
 
-            if (document.getElementById('inviteCode').value) {
-                setTimeout(verifyPasscode, 300);
+            if (document.getElementById('inviteName').value) {
+                setTimeout(verifyGuest, 300);
             }
         }, 800);
     }
 
-    function verifyPasscode() {
-        const code = document.getElementById('inviteCode').value.trim();
+    function verifyGuest() {
+        const name = document.getElementById('inviteName').value.trim();
         const err = document.getElementById('auth-error');
         err.innerText = "";
 
-        if (!code) {
-            err.innerText = "Please enter your passcode.";
+        if (!name) {
+            err.innerText = "Please enter your full name.";
             return;
         }
 
         err.style.color = "#666";
         err.innerText = "Locating your invitation...";
 
-        const finalUrl = AppData.scriptUrl + "?code=" + encodeURIComponent(code);
+        const finalUrl = AppData.scriptUrl + "?name=" + encodeURIComponent(name);
 
         fetch(finalUrl, { redirect: "follow" })
             .then(response => response.text())
@@ -463,104 +521,126 @@
                 try {
                     const data = JSON.parse(text);
                     if (data.found) {
-                        AppData.guest = data;
+                        AppData.group = data.group;
+                        AppData.members = data.members;
                         document.getElementById('auth-section').style.display = 'none';
                         document.getElementById('events-container').style.display = 'block';
-                        document.getElementById('welcome-message').innerText = `To: ${data.name}`;
-                        renderEvents();
+                        const names = data.members.map(m => m.name).join(', ');
+                        document.getElementById('welcome-message').innerText = `To: ${names}`;
+                        renderGroup();
                     } else {
                         err.style.color = "#990000";
-                        err.innerText = data.error ? ("Error: " + data.error) : "Passcode not recognized.";
+                        err.innerText = data.error ? data.error : "We couldn't find that name.";
                     }
                 } catch (e) {
                     err.style.color = "#990000";
                     err.innerText = "Connection error — got a non-JSON response.";
                 }
             })
-            .catch(err2 => {
+            .catch(() => {
                 err.style.color = "#990000";
                 err.innerText = "Network error. Please try again.";
             });
     }
 
-    function renderEvents() {
-        const container = document.getElementById('dynamic-events');
+    function renderGroup() {
+        const container = document.getElementById('members-container');
         const footer = document.getElementById('rsvp-footer');
         const editingNote = document.getElementById('editing-note');
         container.innerHTML = "";
 
-        const prev = AppData.guest.previousResponse;
-        AppData.isEditing = !!prev;
-        editingNote.style.display = AppData.isEditing ? 'block' : 'none';
+        let anyResponseExists = false;
+        let anyEventAnywhere = false;
+        let sharedDietary = "";
 
-        const guestPermissions = [
-            { allowed: AppData.guest.haldi || AppData.guest.mehndi, data: AppData.events.haldi, prevValue: prev ? prev.haldi : null },
-            { allowed: AppData.guest.wedding, data: AppData.events.wedding, prevValue: prev ? prev.wedding : null },
-            { allowed: AppData.guest.reception, data: AppData.events.reception, prevValue: prev ? prev.reception : null }
-        ];
+        AppData.members.forEach(member => {
+            const prev = member.previousResponse;
+            if (prev) anyResponseExists = true;
+            if (prev && prev.dietary && prev.dietary !== "None" && !sharedDietary) sharedDietary = prev.dietary;
 
-        const anyAllowed = guestPermissions.some(e => e.allowed);
+            const memberEvents = [
+                { allowed: member.haldi || member.mehndi, data: AppData.events.haldi, prevValue: prev ? prev.haldi : null },
+                { allowed: member.wedding, data: AppData.events.wedding, prevValue: prev ? prev.wedding : null },
+                { allowed: member.reception, data: AppData.events.reception, prevValue: prev ? prev.reception : null }
+            ];
 
-        if (!anyAllowed) {
-            container.innerHTML = `<div class="no-events-note">We don't see any events marked on your invitation yet — if this looks wrong, please reach out to us directly and we'll sort it out.</div>`;
+            const hasAny = memberEvents.some(e => e.allowed);
+            if (hasAny) anyEventAnywhere = true;
+
+            let memberHTML = `<div class="member-block"><div class="member-name">${member.name}</div>`;
+
+            if (!hasAny) {
+                memberHTML += `<div class="no-events-note">No events are currently marked for ${member.name} — let us know if this looks wrong.</div>`;
+            } else {
+                memberEvents.forEach(event => {
+                    if (event.allowed) {
+                        const stateKey = `${member.code}_${event.data.id}`;
+                        AppData.rsvpState[stateKey] = event.prevValue && event.prevValue !== "N/A" ? event.prevValue : "N/A";
+
+                        memberHTML += `
+                            <div class="event-block">
+                                ${event.data.image ? `<img class="event-image" src="${event.data.image}" alt="${event.data.title}" onerror="this.style.display='none'">` : ''}
+                                <div class="event-title">${event.data.title}</div>
+                                <div class="event-details">
+                                    ${event.data.date} &middot; ${event.data.time}
+                                    <span class="label">Venue</span>
+                                    ${event.data.venue}
+                                </div>
+                                <div class="btn-group">
+                                    <button class="btn-rsvp" id="btn-yes-${stateKey}" onclick="setRsvp('${stateKey}', 'Attending')">Will Attend</button>
+                                    <button class="btn-rsvp" id="btn-no-${stateKey}" onclick="setRsvp('${stateKey}', 'Declined')">Will Not Attend</button>
+                                </div>
+                            </div>
+                        `;
+                    }
+                });
+            }
+
+            memberHTML += `</div>`;
+            container.innerHTML += memberHTML;
+        });
+
+        if (!anyEventAnywhere) {
             footer.style.display = 'none';
             return;
         }
         footer.style.display = 'block';
 
-        guestPermissions.forEach(event => {
-            if (event.allowed) {
-                AppData.rsvpState[event.data.id] = event.prevValue && event.prevValue !== "N/A" ? event.prevValue : "N/A";
-
-                const eventHTML = `
-                    <div class="event-block">
-                        <div class="event-title">${event.data.title}</div>
-                        <div class="event-details">
-                            ${event.data.date} &middot; ${event.data.time}
-                            <span class="label">Venue</span>
-                            ${event.data.venue}
-                        </div>
-                        <div class="btn-group">
-                            <button class="btn-rsvp" id="btn-yes-${event.data.id}" onclick="setRsvp('${event.data.id}', 'Attending')">Will Attend</button>
-                            <button class="btn-rsvp" id="btn-no-${event.data.id}" onclick="setRsvp('${event.data.id}', 'Declined')">Will Not Attend</button>
-                        </div>
-                    </div>
-                `;
-                container.innerHTML += eventHTML;
-            }
+        // re-apply pre-filled selections now that buttons exist in the DOM
+        AppData.members.forEach(member => {
+            [`${member.code}_haldi`, `${member.code}_wedding`, `${member.code}_reception`].forEach(key => {
+                if (AppData.rsvpState[key] && AppData.rsvpState[key] !== "N/A") {
+                    setRsvp(key, AppData.rsvpState[key]);
+                }
+            });
         });
 
-        guestPermissions.forEach(event => {
-            if (event.allowed && AppData.rsvpState[event.data.id] !== "N/A") {
-                setRsvp(event.data.id, AppData.rsvpState[event.data.id]);
-            }
-        });
+        if (sharedDietary) document.getElementById('dietary').value = sharedDietary;
 
-        if (prev && prev.dietary && prev.dietary !== "None") {
-            document.getElementById('dietary').value = prev.dietary;
-        }
-
+        AppData.isEditing = anyResponseExists;
+        editingNote.style.display = AppData.isEditing ? 'block' : 'none';
         document.getElementById('submitBtn').innerText = AppData.isEditing ? "Update RSVP" : "Send RSVP";
     }
 
-    function setRsvp(eventId, status) {
-        AppData.rsvpState[eventId] = status;
-        document.getElementById(`btn-yes-${eventId}`).classList.remove('selected');
-        document.getElementById(`btn-no-${eventId}`).classList.remove('selected');
-        if (status === 'Attending') document.getElementById(`btn-yes-${eventId}`).classList.add('selected');
-        if (status === 'Declined') document.getElementById(`btn-no-${eventId}`).classList.add('selected');
+    function setRsvp(stateKey, status) {
+        AppData.rsvpState[stateKey] = status;
+        const yesBtn = document.getElementById(`btn-yes-${stateKey}`);
+        const noBtn = document.getElementById(`btn-no-${stateKey}`);
+        if (!yesBtn || !noBtn) return;
+        yesBtn.classList.remove('selected');
+        noBtn.classList.remove('selected');
+        if (status === 'Attending') yesBtn.classList.add('selected');
+        if (status === 'Declined') noBtn.classList.add('selected');
     }
 
     function submitRSVP() {
         const btn = document.getElementById('submitBtn');
         const msg = document.getElementById('status-msg');
 
-        const invitedEventIds = Object.keys(AppData.rsvpState);
-        const missedEvent = invitedEventIds.find(id => AppData.rsvpState[id] === "N/A");
-
-        if (missedEvent) {
+        const unanswered = Object.values(AppData.rsvpState).some(v => v === "N/A");
+        if (unanswered) {
             msg.style.color = "#990000";
-            msg.innerText = "Please select 'Will Attend' or 'Will Not Attend' for all events.";
+            msg.innerText = "Please answer for every event before submitting.";
             return;
         }
 
@@ -568,24 +648,26 @@
         btn.disabled = true;
         msg.innerText = "";
 
-        const payload = {
-            code: AppData.guest.code,
-            name: AppData.guest.name,
-            haldi: AppData.rsvpState.haldi || "N/A",
-            wedding: AppData.rsvpState.wedding || "N/A",
-            reception: AppData.rsvpState.reception || "N/A",
-            dietary: document.getElementById('dietary').value
-        };
+        const dietary = document.getElementById('dietary').value;
+
+        const responses = AppData.members.map(member => ({
+            code: member.code,
+            name: member.name,
+            haldi: AppData.rsvpState[`${member.code}_haldi`] || "N/A",
+            wedding: AppData.rsvpState[`${member.code}_wedding`] || "N/A",
+            reception: AppData.rsvpState[`${member.code}_reception`] || "N/A",
+            dietary: dietary
+        }));
 
         fetch(AppData.scriptUrl, {
             method: 'POST',
             mode: 'no-cors',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
+            body: JSON.stringify({ responses: responses })
         })
         .then(() => {
             msg.style.color = "green";
-            msg.innerText = AppData.isEditing ? "Your RSVP has been updated. Thank you!" : "Thank you! Your RSVP has been recorded.";
+            msg.innerText = AppData.isEditing ? "Your family's RSVP has been updated. Thank you!" : "Thank you! Your family's RSVP has been recorded.";
             btn.disabled = false;
             btn.innerText = "Update RSVP";
             AppData.isEditing = true;
