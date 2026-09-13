@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Aditya & Neha | Wedding Invitation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Cinzel:wght@400;600;700&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ivory: #f8f4ec;
+            --card: #fffdf8;
+            --ink: #362419;
+            --ink-soft: #6b584a;
+            --maroon: #7a0016;
+            --gold: #b8863b;
+            --gold-deep: #8f6423;
+            --gold-tint: #e9d9ad;
+        }
+
+        * { box-sizing: border-box; }
+
+        body, html {
+            margin: 0; padding: 0;
+            background-color: transparent;
+            font-family: 'Montserrat', sans-serif;
+            color: var(--ink);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        .page-bg {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?q=80&w=2000&auto=format&fit=crop') center/cover no-repeat;
+            z-index: -1;
+        }
+
+        #hero-scene {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 50;
+            perspective: 1200px;
+            transition: visibility 1.2s;
+        }
+        #hero-scene.dismissed { visibility: hidden; pointer-events: none; }
+
+        .envelope-card {
+            width: 320px;
+            height: 480px;
+            padding: 50px 24px;
+            background: var(--card);
+            border: 2px solid var(--gold);
+            text-align: center;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            transform-origin: left center;
+            transition: transform 1.2s cubic-bezier(0.4, 0.0, 0.2, 1), opacity 0.8s ease 0.3s;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .envelope-card.breaking { transform: rotateY(-110deg) scale(0.95); opacity: 0; }
+
+        .preview-ganesha { color: var(--maroon); font-size: 0.9rem; margin-bottom: 24px; }
+        .preview-names {
+            font-family: 'Cormorant Garamond', serif;
+            font-variant: small-caps;
+            letter-spacing: 2px;
+            font-size: 2.2rem;
+            color: var(--ink);
+            line-height: 1.35;
+            margin-bottom: 30px;
+        }
+
+        .wax-seal {
+            width: 70px; height: 70px;
+            background: radial-gradient(circle, #7a0016 0%, #4a000d 100%);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4), inset 0 0 5px rgba(255,255,255,0.2);
+            display: flex; justify-content: center; align-items: center;
+            color: var(--gold-tint); font-family: 'Cinzel', serif; font-size: 1.2rem; font-weight: 600; letter-spacing: 1px;
+            transition: transform 0.25s ease;
+        }
+        .wax-seal:hover { transform: scale(1.05); }
+        .wax-seal:active { transform: scale(0.9); }
+
+        .tap-hint {
+            font-family: 'Cinzel', serif;
+            font-size: 0.65rem;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: var(--gold-deep);
+            margin-top: 16px;
+        }
+
+        /* mute toggle */
+        #music-toggle {
+            position: fixed;
+            top: 16px; right: 16px;
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            background: var(--card);
+            border: 1px solid var(--gold);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            cursor: pointer;
+            z-index: 70;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+        }
+        #music-toggle.visible { display: flex; }
+
+        #app-container {
+            display: none;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease 0.4s, transform 0.8s ease 0.4s;
+            width: 100%;
+            max-width: 620px;
+            margin: 40px auto;
+            position: relative;
+            z-index: 10;
+            background: transparent;
+        }
+        #app-container.visible { opacity: 1; transform: translateY(0); }
+
+        .frame-outer { position: relative; padding: 18px; }
+
+        .pattern-frame {
+            position: relative;
+            padding: 16px;
+            background-color: var(--card);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cg fill='none' stroke='%23b8863b' stroke-width='0.7' opacity='0.55'%3E%3Cpath d='M12 1 L23 12 L12 23 L1 12 Z'/%3E%3Ccircle cx='12' cy='12' r='1.4'/%3E%3C/g%3E%3C/svg%3E");
+            background-repeat: repeat;
+            border: 1px solid var(--gold);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .app-inner {
+            position: relative;
+            background: var(--card);
+            border: 1px solid var(--gold);
+            padding: 50px 28px 40px;
+            text-align: center;
+        }
+        .app-inner::after {
+            content: "";
+            position: absolute;
+            top: 7px; left: 7px; right: 7px; bottom: 7px;
+            border: 1px solid var(--gold);
+            pointer-events: none;
+        }
+
+        .corner-ornament { position: absolute; width: 42px; height: 42px; color: var(--gold); z-index: 3; }
+        .corner-tl { top: -6px; left: -6px; }
+        .corner-tr { top: -6px; right: -6px; transform: scaleX(-1); }
+        .corner-bl { bottom: -6px; left: -6px; transform: scaleY(-1); }
+        .corner-br { bottom: -6px; right: -6px; transform: scale(-1,-1); }
+
+        .medallion { width: 44px; height: 44px; color: var(--gold); margin: 0 auto; }
+        .medallion.top { margin-bottom: 18px; }
+        .medallion.bottom { margin-top: 26px; transform: rotate(180deg); }
+
+        .ganesha-mark { color: var(--maroon); font-size: 0.78rem; letter-spacing: 1px; margin-bottom: 18px; }
+
+        .pre-title {
+            font-family: 'Cinzel', serif;
+            font-size: 0.72rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 22px;
+            color: var(--maroon);
+        }
+
+        h1.couple-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-variant: small-caps;
+            font-weight: 600;
+            font-size: 3rem;
+            letter-spacing: 3px;
+            margin: 2px 0;
+            color: var(--ink);
+        }
+
+        .ampersand {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 1.6rem;
+            color: var(--gold-deep);
+            margin: 2px 0;
+            display: block;
+        }
+
+        .divider { width: 54px; height: 1px; background: var(--gold); margin: 30px auto; }
+
+        .cover-image {
+            width: 100%;
+            max-width: 320px;
+            border-radius: 4px;
+            border: 1px solid var(--gold-tint);
+            margin: 0 auto 22px;
+            display: block;
+        }
+
+        /* =========================================
+           GROUP / RSVP INTERFACE
+           ========================================= */
+        .member-block {
+            margin: 38px 0;
+            padding-top: 24px;
+            border-top: 1px solid var(--gold-tint);
+        }
+        .member-block:first-child { border-top: none; padding-top: 0; }
+
+        .member-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-variant: small-caps;
+            font-weight: 600;
+            font-size: 1.7rem;
+            color: var(--ink);
+            margin-bottom: 18px;
+        }
+
+        .event-block { margin: 26px 0; }
+
+        .event-image {
+            width: 100%;
+            border-radius: 4px;
+            border: 1px solid var(--gold-tint);
+            margin-bottom: 14px;
+            display: block;
+        }
+
+        .event-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-variant: small-caps;
+            font-weight: 600;
+            font-size: 1.5rem;
+            color: var(--maroon);
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .event-details {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1rem;
+            letter-spacing: 0.5px;
+            color: var(--ink-soft);
+            margin-bottom: 18px;
+            line-height: 1.7;
+        }
+        .event-details .label {
+            font-family: 'Cinzel', serif;
+            font-size: 0.62rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--gold-deep);
+            display: block;
+            margin-top: 12px;
+        }
+
+        .btn-group { display: flex; gap: 12px; justify-content: center; }
+
+        .btn-rsvp {
+            flex: 1;
+            padding: 12px 8px;
+            background: transparent;
+            border: 1px solid var(--ink);
+            color: var(--ink);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.7rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-rsvp.selected { background: var(--maroon); border-color: var(--maroon); color: #fff; }
+
+        .no-events-note {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1rem;
+            color: var(--ink-soft);
+            padding: 14px 10px;
+            border-top: 1px solid var(--gold-tint);
+            border-bottom: 1px solid var(--gold-tint);
+            margin: 14px 0;
+        }
+
+        .editing-note {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.78rem;
+            color: var(--gold-deep);
+            margin-bottom: 20px;
+            letter-spacing: 0.5px;
+        }
+
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid var(--gold-tint);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.88rem;
+            text-align: center;
+            box-sizing: border-box;
+            margin-bottom: 14px;
+            background: #fff;
+            color: var(--ink);
+            letter-spacing: 1px;
+        }
+        textarea { text-align: left; }
+        input[type="text"]:focus, textarea:focus { border-color: var(--gold-deep); outline: none; }
+
+        .btn-primary {
+            width: 100%;
+            background: var(--maroon);
+            color: #fff;
+            padding: 15px;
+            border: none;
+            font-family: 'Cinzel', serif;
+            font-size: 0.8rem;
+            letter-spacing: 2.5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .btn-primary:hover { background: #5a0010; }
+        .btn-primary:disabled { background: #c9b6a8; cursor: not-allowed; }
+
+        #status-msg, #auth-error { font-family: 'Montserrat', sans-serif; }
+
+        @media (max-width: 480px) {
+            #app-container { padding: 14px 10px 50px; margin: 20px auto; }
+            .frame-outer { padding: 6px; }
+            .pattern-frame { padding: 10px; }
+            .app-inner { padding: 42px 14px 32px; }
+            h1.couple-name { font-size: 2.5rem; }
+            .envelope-card { width: 280px; height: 440px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="page-bg"></div>
+
+<!-- Upload your song file to your repo as assets/song.mp3 -->
+<audio id="bg-music" loop preload="none">
+    <source src="assets/song.mp3" type="audio/mpeg">
+</audio>
+<div id="music-toggle" onclick="toggleMusic()">🔊</div>
+
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <symbol id="ornament-corner" viewBox="0 0 60 60">
+      <path d="M6,6 C 18,10 14,24 28,22" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/>
+      <ellipse cx="14" cy="12" rx="5" ry="2.4" transform="rotate(-25 14 12)" fill="none" stroke="currentColor" stroke-width="1"/>
+      <ellipse cx="21" cy="19" rx="5" ry="2.4" transform="rotate(15 21 19)" fill="none" stroke="currentColor" stroke-width="1"/>
+      <circle cx="29" cy="22" r="2.6" fill="none" stroke="currentColor" stroke-width="1"/>
+      <circle cx="29" cy="22" r="1" fill="currentColor"/>
+    </symbol>
+    <symbol id="ornament-medallion" viewBox="0 0 60 60">
+      <g fill="none" stroke="currentColor" stroke-width="1.1">
+        <ellipse cx="30" cy="18" rx="6" ry="12"/>
+        <ellipse cx="30" cy="18" rx="6" ry="12" transform="rotate(45 30 18)"/>
+        <ellipse cx="30" cy="18" rx="6" ry="12" transform="rotate(90 30 18)"/>
+        <ellipse cx="30" cy="18" rx="6" ry="12" transform="rotate(135 30 18)"/>
+        <circle cx="30" cy="18" r="3.4"/>
+      </g>
+      <path d="M30,30 C 22,34 22,44 30,50 C 38,44 38,34 30,30 Z" fill="none" stroke="currentColor" stroke-width="1.1"/>
+    </symbol>
+  </defs>
+</svg>
+
+<div id="hero-scene">
+    <div class="envelope-card" id="envelope-card">
+        <div class="preview-ganesha">॥ श्री गणेशाय नमः ॥</div>
+        <div class="preview-names">Aditya<br>&amp;<br>Neha</div>
+        <div class="wax-seal" onclick="openEnvelope()">A&amp;N</div>
+        <div class="tap-hint">Tap the seal to open</div>
+    </div>
+</div>
+
+<div id="app-container">
+    <div class="frame-outer">
+        <svg class="corner-ornament corner-tl"><use href="#ornament-corner"/></svg>
+        <svg class="corner-ornament corner-tr"><use href="#ornament-corner"/></svg>
+        <svg class="corner-ornament corner-bl"><use href="#ornament-corner"/></svg>
+        <svg class="corner-ornament corner-br"><use href="#ornament-corner"/></svg>
+
+        <div class="pattern-frame">
+            <div class="app-inner">
+                <svg class="medallion top"><use href="#ornament-medallion"/></svg>
+
+                <div class="ganesha-mark">॥ श्री गणेशाय नमः ॥</div>
+                <div class="pre-title" id="ui-tagline"></div>
+                <h1 class="couple-name" id="ui-name1"></h1>
+                <span class="ampersand">&amp;</span>
+                <h1 class="couple-name" id="ui-name2"></h1>
+
+                <div class="divider"></div>
+
+                <div id="auth-section">
+                    <!-- Upload a general stock photo to your repo as assets/cover.jpeg -->
+                    <img src="assets/cover.jpeg" alt="" class="cover-image" onerror="this.style.display='none'">
+                    <div class="pre-title" style="margin-bottom: 14px; color: var(--ink-soft);">Your Invitation</div>
+                    <input type="text" id="inviteName" placeholder="ENTER YOUR FULL NAME">
+                    <button class="btn-primary" onclick="verifyGuest()">Unlock Details</button>
+                    <div id="auth-error" style="color: #990000; font-size: 0.82rem; margin-top: 14px; font-weight: 500;"></div>
+                </div>
+
+                <div id="events-container" style="display: none;">
+                    <p style="font-family: 'Cormorant Garamond', serif; font-variant: small-caps; font-size: 1.3rem; color: var(--ink); font-weight: 600; letter-spacing: 1px;" id="welcome-message"></p>
+                    <p style="font-family: 'Cormorant Garamond', serif; font-size: 1rem; color: var(--ink-soft); margin-bottom: 10px;">Please see the details of our celebration below.</p>
+                    <p class="editing-note" id="editing-note" style="display:none;">You've already responded — feel free to update your answers below.</p>
+
+                    <div id="members-container"></div>
+
+                    <div id="rsvp-footer">
+                        <div class="divider"></div>
+                        <textarea id="dietary" rows="3" placeholder="Dietary requirements or special notes for your family..."></textarea>
+                        <button class="btn-primary" onclick="submitRSVP()" id="submitBtn">Send RSVP</button>
+                        <div id="status-msg" style="margin-top: 15px; font-size: 0.9rem; font-weight: 500;"></div>
+                    </div>
+                </div>
+
+                <svg class="medallion bottom"><use href="#ornament-medallion"/></svg>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const AppData = {
+        scriptUrl: "https://script.google.com/macros/s/AKfycbwbIQhxyy0ytZuuXT71UxjtvRPJahiChuFoD6KSGnpbWN8UzCYKpJXxEwAfM4J0jymv/exec", // redeploy after updating the Apps Script, then paste the new URL here
+        couple: { name1: "Aditya", name2: "Neha" },
+        tagline: "joyfully invite you to celebrate the wedding of",
+        events: {
+            // Upload these two images to your repo under assets/ with these exact names, or change the paths.
+            haldi: { id: "haldi", title: "Haldi & Mehndi", date: "Monday, November 16", time: "4:00 PM", venue: "Family Residence", image: "assets/haldi-invite.jpeg" },
+            wedding: { id: "wedding", title: "Wedding Ceremony", date: "Thursday, November 18", time: "10:30 AM", venue: "The Epping Club", image: "assets/wedding-invite.jpeg" },
+            reception: { id: "reception", title: "Wedding Reception", date: "Saturday, November 20", time: "6:00 PM", venue: "Fontana Amorosa", image: null }
+        },
+        group: null,
+        members: [],
+        rsvpState: {}, // keyed as `${code}_${eventId}`
+        isEditing: false
+    };
+
+    document.getElementById('ui-tagline').innerText = AppData.tagline;
+    document.getElementById('ui-name1').innerText = AppData.couple.name1;
+    document.getElementById('ui-name2').innerText = AppData.couple.name2;
+
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('name')) {
+        document.getElementById('inviteName').value = urlParams.get('name');
+    }
+
+    function toggleMusic() {
+        const audio = document.getElementById('bg-music');
+        const btn = document.getElementById('music-toggle');
+        if (audio.paused) {
+            audio.play().catch(() => {});
+            btn.innerText = '🔊';
+        } else {
+            audio.pause();
+            btn.innerText = '🔇';
+        }
+    }
+
+    function openEnvelope() {
+        const card = document.getElementById('envelope-card');
+        const hero = document.getElementById('hero-scene');
+        const app = document.getElementById('app-container');
+        const audio = document.getElementById('bg-music');
+        const musicBtn = document.getElementById('music-toggle');
+
+        // this click is a real user gesture, so autoplay-with-sound is allowed here
+        audio.volume = 0.45;
+        audio.play().then(() => {
+            musicBtn.classList.add('visible');
+        }).catch(() => {
+            // file may be missing or blocked — fail silently, just don't show the toggle
+        });
+
+        card.classList.add('breaking');
+
+        setTimeout(() => {
+            hero.classList.add('dismissed');
+            app.style.display = 'block';
+            void app.offsetWidth;
+            app.classList.add('visible');
+
+            if (document.getElementById('inviteName').value) {
+                setTimeout(verifyGuest, 300);
+            }
+        }, 800);
+    }
+
+    function verifyGuest() {
+        const name = document.getElementById('inviteName').value.trim();
+        const err = document.getElementById('auth-error');
+        err.innerText = "";
+
+        if (!name) {
+            err.innerText = "Please enter your full name.";
+            return;
+        }
+
+        err.style.color = "#666";
+        err.innerText = "Locating your invitation...";
+
+        const finalUrl = AppData.scriptUrl + "?name=" + encodeURIComponent(name);
+
+        fetch(finalUrl, { redirect: "follow" })
+            .then(response => response.text())
+            .then(text => {
+                try {
+                    const data = JSON.parse(text);
+                    if (data.found) {
+                        AppData.group = data.group;
+                        AppData.members = data.members;
+                        document.getElementById('auth-section').style.display = 'none';
+                        document.getElementById('events-container').style.display = 'block';
+                        const names = data.members.map(m => m.name).join(', ');
+                        document.getElementById('welcome-message').innerText = `To: ${names}`;
+                        renderGroup();
+                    } else {
+                        err.style.color = "#990000";
+                        err.innerText = data.error ? data.error : "We couldn't find that name.";
+                    }
+                } catch (e) {
+                    err.style.color = "#990000";
+                    err.innerText = "Connection error — got a non-JSON response.";
+                }
+            })
+            .catch(() => {
+                err.style.color = "#990000";
+                err.innerText = "Network error. Please try again.";
+            });
+    }
+
+    function renderGroup() {
+        const container = document.getElementById('members-container');
+        const footer = document.getElementById('rsvp-footer');
+        const editingNote = document.getElementById('editing-note');
+        container.innerHTML = "";
+
+        let anyResponseExists = false;
+        let anyEventAnywhere = false;
+        let sharedDietary = "";
+
+        AppData.members.forEach(member => {
+            const prev = member.previousResponse;
+            if (prev) anyResponseExists = true;
+            if (prev && prev.dietary && prev.dietary !== "None" && !sharedDietary) sharedDietary = prev.dietary;
+
+            const memberEvents = [
+                { allowed: member.haldi || member.mehndi, data: AppData.events.haldi, prevValue: prev ? prev.haldi : null },
+                { allowed: member.wedding, data: AppData.events.wedding, prevValue: prev ? prev.wedding : null },
+                { allowed: member.reception, data: AppData.events.reception, prevValue: prev ? prev.reception : null }
+            ];
+
+            const hasAny = memberEvents.some(e => e.allowed);
+            if (hasAny) anyEventAnywhere = true;
+
+            let memberHTML = `<div class="member-block"><div class="member-name">${member.name}</div>`;
+
+            if (!hasAny) {
+                memberHTML += `<div class="no-events-note">No events are currently marked for ${member.name} — let us know if this looks wrong.</div>`;
+            } else {
+                memberEvents.forEach(event => {
+                    if (event.allowed) {
+                        const stateKey = `${member.code}_${event.data.id}`;
+                        AppData.rsvpState[stateKey] = event.prevValue && event.prevValue !== "N/A" ? event.prevValue : "N/A";
+
+                        memberHTML += `
+                            <div class="event-block">
+                                ${event.data.image ? `<img class="event-image" src="${event.data.image}" alt="${event.data.title}" onerror="this.style.display='none'">` : ''}
+                                <div class="event-title">${event.data.title}</div>
+                                <div class="event-details">
+                                    ${event.data.date} &middot; ${event.data.time}
+                                    <span class="label">Venue</span>
+                                    ${event.data.venue}
+                                </div>
+                                <div class="btn-group">
+                                    <button class="btn-rsvp" id="btn-yes-${stateKey}" onclick="setRsvp('${stateKey}', 'Attending')">Will Attend</button>
+                                    <button class="btn-rsvp" id="btn-no-${stateKey}" onclick="setRsvp('${stateKey}', 'Declined')">Will Not Attend</button>
+                                </div>
+                            </div>
+                        `;
+                    }
+                });
+            }
+
+            memberHTML += `</div>`;
+            container.innerHTML += memberHTML;
+        });
+
+        if (!anyEventAnywhere) {
+            footer.style.display = 'none';
+            return;
+        }
+        footer.style.display = 'block';
+
+        // re-apply pre-filled selections now that buttons exist in the DOM
+        AppData.members.forEach(member => {
+            [`${member.code}_haldi`, `${member.code}_wedding`, `${member.code}_reception`].forEach(key => {
+                if (AppData.rsvpState[key] && AppData.rsvpState[key] !== "N/A") {
+                    setRsvp(key, AppData.rsvpState[key]);
+                }
+            });
+        });
+
+        if (sharedDietary) document.getElementById('dietary').value = sharedDietary;
+
+        AppData.isEditing = anyResponseExists;
+        editingNote.style.display = AppData.isEditing ? 'block' : 'none';
+        document.getElementById('submitBtn').innerText = AppData.isEditing ? "Update RSVP" : "Send RSVP";
+    }
+
+    function setRsvp(stateKey, status) {
+        AppData.rsvpState[stateKey] = status;
+        const yesBtn = document.getElementById(`btn-yes-${stateKey}`);
+        const noBtn = document.getElementById(`btn-no-${stateKey}`);
+        if (!yesBtn || !noBtn) return;
+        yesBtn.classList.remove('selected');
+        noBtn.classList.remove('selected');
+        if (status === 'Attending') yesBtn.classList.add('selected');
+        if (status === 'Declined') noBtn.classList.add('selected');
+    }
+
+    function submitRSVP() {
+        const btn = document.getElementById('submitBtn');
+        const msg = document.getElementById('status-msg');
+
+        const unanswered = Object.values(AppData.rsvpState).some(v => v === "N/A");
+        if (unanswered) {
+            msg.style.color = "#990000";
+            msg.innerText = "Please answer for every event before submitting.";
+            return;
+        }
+
+        btn.innerText = "Sending...";
+        btn.disabled = true;
+        msg.innerText = "";
+
+        const dietary = document.getElementById('dietary').value;
+
+        const responses = AppData.members.map(member => ({
+            code: member.code,
+            name: member.name,
+            haldi: AppData.rsvpState[`${member.code}_haldi`] || "N/A",
+            wedding: AppData.rsvpState[`${member.code}_wedding`] || "N/A",
+            reception: AppData.rsvpState[`${member.code}_reception`] || "N/A",
+            dietary: dietary
+        }));
+
+        fetch(AppData.scriptUrl, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ responses: responses })
+        })
+        .then(() => {
+            msg.style.color = "green";
+            msg.innerText = AppData.isEditing ? "Your family's RSVP has been updated. Thank you!" : "Thank you! Your family's RSVP has been recorded.";
+            btn.disabled = false;
+            btn.innerText = "Update RSVP";
+            AppData.isEditing = true;
+        })
+        .catch(() => {
+            msg.style.color = "#990000";
+            msg.innerText = "Error sending RSVP. Please try again.";
+            btn.innerText = AppData.isEditing ? "Update RSVP" : "Send RSVP";
+            btn.disabled = false;
+        });
+    }
+</script>
+</body>
+</html>
