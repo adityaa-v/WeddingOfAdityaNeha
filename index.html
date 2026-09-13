@@ -97,7 +97,6 @@
             margin-top: 16px;
         }
 
-        /* mute toggle */
         #music-toggle {
             position: fixed;
             top: 16px; right: 16px;
@@ -208,25 +207,31 @@
         }
 
         /* =========================================
-           GROUP / RSVP INTERFACE
+           EVENT TABS
            ========================================= */
-        .member-block {
-            margin: 38px 0;
-            padding-top: 24px;
-            border-top: 1px solid var(--gold-tint);
+        .event-tabs {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
         }
-        .member-block:first-child { border-top: none; padding-top: 0; }
-
-        .member-name {
-            font-family: 'Cormorant Garamond', serif;
-            font-variant: small-caps;
-            font-weight: 600;
-            font-size: 1.7rem;
-            color: var(--ink);
-            margin-bottom: 18px;
+        .event-tab {
+            padding: 9px 14px;
+            border: 1px solid var(--gold);
+            background: transparent;
+            color: var(--maroon);
+            font-family: 'Cinzel', serif;
+            font-size: 0.65rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 3px;
         }
+        .event-tab.active { background: var(--maroon); border-color: var(--maroon); color: #fff; }
 
-        .event-block { margin: 26px 0; }
+        .event-panel { display: none; text-align: center; }
+        .event-panel.active { display: block; }
 
         .event-image {
             width: 100%;
@@ -240,7 +245,7 @@
             font-family: 'Cormorant Garamond', serif;
             font-variant: small-caps;
             font-weight: 600;
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             color: var(--maroon);
             margin-bottom: 8px;
             letter-spacing: 1px;
@@ -251,7 +256,7 @@
             font-size: 1rem;
             letter-spacing: 0.5px;
             color: var(--ink-soft);
-            margin-bottom: 18px;
+            margin-bottom: 6px;
             line-height: 1.7;
         }
         .event-details .label {
@@ -264,22 +269,67 @@
             margin-top: 12px;
         }
 
-        .btn-group { display: flex; gap: 12px; justify-content: center; }
-
-        .btn-rsvp {
-            flex: 1;
-            padding: 12px 8px;
-            background: transparent;
-            border: 1px solid var(--ink);
-            color: var(--ink);
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.7rem;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: all 0.3s;
+        .event-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 16px 0 22px;
+            flex-wrap: wrap;
         }
-        .btn-rsvp.selected { background: var(--maroon); border-color: var(--maroon); color: #fff; }
+        .event-action-link {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.72rem;
+            letter-spacing: 0.5px;
+            color: var(--gold-deep);
+            border: 1px solid var(--gold-tint);
+            padding: 8px 12px;
+            border-radius: 3px;
+            text-decoration: none;
+            cursor: pointer;
+            background: #fff;
+        }
+        .event-action-link:hover { border-color: var(--gold-deep); }
+
+        .member-rows { text-align: left; margin-top: 10px; }
+
+        .member-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 12px 0;
+            border-bottom: 1px dashed var(--gold-tint);
+            flex-wrap: wrap;
+        }
+        .member-row:last-child { border-bottom: none; }
+
+        .member-row-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-variant: small-caps;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--ink);
+            flex: 1 1 auto;
+            min-width: 90px;
+        }
+
+        .mini-btn-group { display: flex; gap: 6px; flex-shrink: 0; }
+
+        .mini-btn {
+            padding: 8px 12px;
+            font-size: 0.62rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border: 1px solid var(--ink);
+            background: transparent;
+            color: var(--ink);
+            cursor: pointer;
+            border-radius: 3px;
+            white-space: nowrap;
+            font-family: 'Montserrat', sans-serif;
+            transition: all 0.2s;
+        }
+        .mini-btn.selected { background: var(--maroon); border-color: var(--maroon); color: #fff; }
 
         .no-events-note {
             font-family: 'Cormorant Garamond', serif;
@@ -340,6 +390,8 @@
             .app-inner { padding: 42px 14px 32px; }
             h1.couple-name { font-size: 2.5rem; }
             .envelope-card { width: 280px; height: 440px; }
+            .mini-btn { padding: 7px 9px; font-size: 0.58rem; }
+            .event-tab { padding: 8px 11px; font-size: 0.6rem; }
         }
     </style>
 </head>
@@ -347,7 +399,6 @@
 
 <div class="page-bg"></div>
 
-<!-- Upload your song file to your repo as assets/song.mp3 -->
 <audio id="bg-music" loop preload="none">
     <source src="assets/song.mp3" type="audio/mpeg">
 </audio>
@@ -404,7 +455,6 @@
                 <div class="divider"></div>
 
                 <div id="auth-section">
-                    <!-- Upload a general stock photo to your repo as assets/cover.jpeg -->
                     <img src="assets/cover.jpeg" alt="" class="cover-image" onerror="this.style.display='none'">
                     <div class="pre-title" style="margin-bottom: 14px; color: var(--ink-soft);">Your Invitation</div>
                     <input type="text" id="inviteName" placeholder="ENTER YOUR FULL NAME">
@@ -414,10 +464,10 @@
 
                 <div id="events-container" style="display: none;">
                     <p style="font-family: 'Cormorant Garamond', serif; font-variant: small-caps; font-size: 1.3rem; color: var(--ink); font-weight: 600; letter-spacing: 1px;" id="welcome-message"></p>
-                    <p style="font-family: 'Cormorant Garamond', serif; font-size: 1rem; color: var(--ink-soft); margin-bottom: 10px;">Please see the details of our celebration below.</p>
                     <p class="editing-note" id="editing-note" style="display:none;">You've already responded — feel free to update your answers below.</p>
 
-                    <div id="members-container"></div>
+                    <div class="event-tabs" id="event-tabs"></div>
+                    <div id="event-panels"></div>
 
                     <div id="rsvp-footer">
                         <div class="divider"></div>
@@ -435,18 +485,35 @@
 
 <script>
     const AppData = {
-        scriptUrl: "https://script.google.com/macros/s/AKfycbwbIQhxyy0ytZuuXT71UxjtvRPJahiChuFoD6KSGnpbWN8UzCYKpJXxEwAfM4J0jymv/exec", // redeploy after updating the Apps Script, then paste the new URL here
+        scriptUrl: "https://script.google.com/macros/s/AKfycbwbIQhxyy0ytZuuXT71UxjtvRPJahiChuFoD6KSGnpbWN8UzCYKpJXxEwAfM4J0jymv/exec",
         couple: { name1: "Aditya", name2: "Neha" },
         tagline: "joyfully invite you to celebrate the wedding of",
         events: {
-            // Upload these two images to your repo under assets/ with these exact names, or change the paths.
-            haldi: { id: "haldi", title: "Haldi & Mehndi", date: "Monday, November 16", time: "4:00 PM", venue: "Family Residence", image: "assets/haldi-invite.jpeg" },
-            wedding: { id: "wedding", title: "Wedding Ceremony", date: "Thursday, November 18", time: "10:30 AM", venue: "The Epping Club", image: "assets/wedding-invite.jpeg" },
-            reception: { id: "reception", title: "Wedding Reception", date: "Saturday, November 20", time: "6:00 PM", venue: "Fontana Amorosa", image: null }
+            haldi: {
+                id: "haldi", title: "Haldi & Mehndi",
+                date: "Monday, November 16", time: "10:30 AM", venue: "Family Residence",
+                image: "assets/haldi-invite.jpeg",
+                mapsUrl: "https://maps.google.com/?q=REPLACE_WITH_HALDI_VENUE_LINK",
+                icsStart: "20271116T103000", icsEnd: "20271116T133000"
+            },
+            wedding: {
+                id: "wedding", title: "Wedding Ceremony",
+                date: "Thursday, November 18", time: "10:30 AM", venue: "The Epping Club",
+                image: "assets/wedding-invite.jpeg",
+                mapsUrl: "https://maps.google.com/?q=REPLACE_WITH_EPPING_CLUB_LINK",
+                icsStart: "20271118T103000", icsEnd: "20271118T153000"
+            },
+            reception: {
+                id: "reception", title: "Wedding Reception",
+                date: "Saturday, November 20", time: "6:00 PM", venue: "Fontana Amorosa",
+                image: null,
+                mapsUrl: "https://maps.google.com/?q=REPLACE_WITH_FONTANA_AMOROSA_LINK",
+                icsStart: "20271120T180000", icsEnd: "20271120T230000"
+            }
         },
         group: null,
         members: [],
-        rsvpState: {}, // keyed as `${code}_${eventId}`
+        rsvpState: {},
         isEditing: false
     };
 
@@ -478,13 +545,8 @@
         const audio = document.getElementById('bg-music');
         const musicBtn = document.getElementById('music-toggle');
 
-        // this click is a real user gesture, so autoplay-with-sound is allowed here
         audio.volume = 0.45;
-        audio.play().then(() => {
-            musicBtn.classList.add('visible');
-        }).catch(() => {
-            // file may be missing or blocked — fail silently, just don't show the toggle
-        });
+        audio.play().then(() => { musicBtn.classList.add('visible'); }).catch(() => {});
 
         card.classList.add('breaking');
 
@@ -528,6 +590,7 @@
                         const names = data.members.map(m => m.name).join(', ');
                         document.getElementById('welcome-message').innerText = `To: ${names}`;
                         renderGroup();
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
                     } else {
                         err.style.color = "#990000";
                         err.innerText = data.error ? data.error : "We couldn't find that name.";
@@ -543,74 +606,117 @@
             });
     }
 
+    function downloadICS(eventKey) {
+        const ev = AppData.events[eventKey];
+        const ics = [
+            "BEGIN:VCALENDAR",
+            "VERSION:2.0",
+            "BEGIN:VEVENT",
+            `SUMMARY:${ev.title} - Aditya & Neha's Wedding`,
+            `DTSTART:${ev.icsStart}`,
+            `DTEND:${ev.icsEnd}`,
+            `LOCATION:${ev.venue}`,
+            `DESCRIPTION:${ev.title} for Aditya & Neha's wedding celebrations`,
+            "END:VEVENT",
+            "END:VCALENDAR"
+        ].join("\r\n");
+
+        const blob = new Blob([ics], { type: "text/calendar" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = ev.title.replace(/\s+/g, '-') + ".ics";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+
+    function switchTab(key) {
+        document.querySelectorAll('.event-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.event-panel').forEach(p => p.classList.remove('active'));
+        document.getElementById('tab-' + key).classList.add('active');
+        document.getElementById('panel-' + key).classList.add('active');
+    }
+
     function renderGroup() {
-        const container = document.getElementById('members-container');
+        const tabsContainer = document.getElementById('event-tabs');
+        const panelsContainer = document.getElementById('event-panels');
         const footer = document.getElementById('rsvp-footer');
         const editingNote = document.getElementById('editing-note');
-        container.innerHTML = "";
+        tabsContainer.innerHTML = "";
+        panelsContainer.innerHTML = "";
 
         let anyResponseExists = false;
         let anyEventAnywhere = false;
         let sharedDietary = "";
+        let firstKey = null;
 
-        AppData.members.forEach(member => {
-            const prev = member.previousResponse;
-            if (prev) anyResponseExists = true;
-            if (prev && prev.dietary && prev.dietary !== "None" && !sharedDietary) sharedDietary = prev.dietary;
+        const eventKeys = ['haldi', 'wedding', 'reception'];
 
-            const memberEvents = [
-                { allowed: member.haldi || member.mehndi, data: AppData.events.haldi, prevValue: prev ? prev.haldi : null },
-                { allowed: member.wedding, data: AppData.events.wedding, prevValue: prev ? prev.wedding : null },
-                { allowed: member.reception, data: AppData.events.reception, prevValue: prev ? prev.reception : null }
-            ];
+        eventKeys.forEach(key => {
+            const eventDef = AppData.events[key];
+            const invitedMembers = AppData.members.filter(m => key === 'haldi' ? (m.haldi || m.mehndi) : m[key]);
+            if (invitedMembers.length === 0) return;
 
-            const hasAny = memberEvents.some(e => e.allowed);
-            if (hasAny) anyEventAnywhere = true;
+            anyEventAnywhere = true;
+            if (!firstKey) firstKey = key;
 
-            let memberHTML = `<div class="member-block"><div class="member-name">${member.name}</div>`;
+            tabsContainer.innerHTML += `<button class="event-tab" id="tab-${key}" onclick="switchTab('${key}')">${eventDef.title}</button>`;
 
-            if (!hasAny) {
-                memberHTML += `<div class="no-events-note">No events are currently marked for ${member.name} — let us know if this looks wrong.</div>`;
-            } else {
-                memberEvents.forEach(event => {
-                    if (event.allowed) {
-                        const stateKey = `${member.code}_${event.data.id}`;
-                        AppData.rsvpState[stateKey] = event.prevValue && event.prevValue !== "N/A" ? event.prevValue : "N/A";
+            let panelHTML = `
+                <div class="event-panel" id="panel-${key}">
+                    ${eventDef.image ? `<img class="event-image" src="${eventDef.image}" alt="${eventDef.title}" onerror="this.style.display='none'">` : ''}
+                    <div class="event-title">${eventDef.title}</div>
+                    <div class="event-details">
+                        ${eventDef.date} &middot; ${eventDef.time}
+                        <span class="label">Venue</span>
+                        ${eventDef.venue}
+                    </div>
+                    <div class="event-actions">
+                        <a class="event-action-link" href="${eventDef.mapsUrl}" target="_blank" rel="noopener">📍 View Map</a>
+                        <span class="event-action-link" onclick="downloadICS('${key}')">📅 Add to Calendar</span>
+                    </div>
+                    <div class="member-rows">
+            `;
 
-                        memberHTML += `
-                            <div class="event-block">
-                                ${event.data.image ? `<img class="event-image" src="${event.data.image}" alt="${event.data.title}" onerror="this.style.display='none'">` : ''}
-                                <div class="event-title">${event.data.title}</div>
-                                <div class="event-details">
-                                    ${event.data.date} &middot; ${event.data.time}
-                                    <span class="label">Venue</span>
-                                    ${event.data.venue}
-                                </div>
-                                <div class="btn-group">
-                                    <button class="btn-rsvp" id="btn-yes-${stateKey}" onclick="setRsvp('${stateKey}', 'Attending')">Will Attend</button>
-                                    <button class="btn-rsvp" id="btn-no-${stateKey}" onclick="setRsvp('${stateKey}', 'Declined')">Will Not Attend</button>
-                                </div>
-                            </div>
-                        `;
-                    }
-                });
-            }
+            invitedMembers.forEach(member => {
+                const prev = member.previousResponse;
+                if (prev) anyResponseExists = true;
+                if (prev && prev.dietary && prev.dietary !== "None" && !sharedDietary) sharedDietary = prev.dietary;
 
-            memberHTML += `</div>`;
-            container.innerHTML += memberHTML;
+                const prevValue = prev ? prev[key] : null;
+                const stateKey = `${member.code}_${key}`;
+                AppData.rsvpState[stateKey] = prevValue && prevValue !== "N/A" ? prevValue : "N/A";
+
+                panelHTML += `
+                    <div class="member-row">
+                        <div class="member-row-name">${member.name}</div>
+                        <div class="mini-btn-group">
+                            <button class="mini-btn" id="btn-yes-${stateKey}" onclick="setRsvp('${stateKey}', 'Attending')">Attending</button>
+                            <button class="mini-btn" id="btn-no-${stateKey}" onclick="setRsvp('${stateKey}', 'Declined')">Declined</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            panelHTML += `</div></div>`;
+            panelsContainer.innerHTML += panelHTML;
         });
 
         if (!anyEventAnywhere) {
+            panelsContainer.innerHTML = `<div class="no-events-note">We don't see any events marked on this invitation yet — let us know if this looks wrong.</div>`;
             footer.style.display = 'none';
             return;
         }
         footer.style.display = 'block';
+        switchTab(firstKey);
 
-        // re-apply pre-filled selections now that buttons exist in the DOM
         AppData.members.forEach(member => {
-            [`${member.code}_haldi`, `${member.code}_wedding`, `${member.code}_reception`].forEach(key => {
-                if (AppData.rsvpState[key] && AppData.rsvpState[key] !== "N/A") {
-                    setRsvp(key, AppData.rsvpState[key]);
+            ['haldi', 'wedding', 'reception'].forEach(key => {
+                const stateKey = `${member.code}_${key}`;
+                if (AppData.rsvpState[stateKey] && AppData.rsvpState[stateKey] !== 'N/A') {
+                    setRsvp(stateKey, AppData.rsvpState[stateKey]);
                 }
             });
         });
